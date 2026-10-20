@@ -1,58 +1,75 @@
-// Contexte marché par pays, injecté dans le prompt pour ancrer la stratégie.
+// Configuration par pays: injectée dans les prompts et utilisée pour les valeurs par défaut.
 export interface CountryContext {
+  name: string;
+  currency: string;
   languages: string[];
+  zones: string[];
   payments: string;
   channels: string;
   notes: string;
 }
 
 export const COUNTRIES: Record<string, CountryContext> = {
-  "Côte d'Ivoire": {
-    languages: ["Français", "Nouchi", "Dioula"],
-    payments: "Orange Money, MTN MoMo, Wave",
-    channels: "WhatsApp, Facebook, TikTok, radio, affichage Abidjan",
-    notes: "Abidjan concentre l'essentiel du pouvoir d'achat; forte pénétration mobile money.",
+  CI: {
+    name: "Côte d'Ivoire", currency: "XOF",
+    languages: ["Français", "Nouchi", "Dioula", "Baoulé"],
+    zones: ["Grand Abidjan", "Bouaké", "Yamoussoukro", "San-Pédro", "Korhogo", "Daloa", "National"],
+    payments: "Orange Money, MTN MoMo, Moov Money, Wave, cartes bancaires",
+    channels: "WhatsApp Business, Facebook, TikTok, Instagram, LinkedIn (B2B), radio, affichage urbain",
+    notes: "Marché pilote. Abidjan concentre l'essentiel du pouvoir d'achat; forte adoption du mobile money; le nouchi fonctionne bien en contenu social grand public.",
   },
-  Sénégal: {
+  SN: {
+    name: "Sénégal", currency: "XOF",
     languages: ["Français", "Wolof"],
+    zones: ["Dakar", "Thiès", "Saint-Louis", "Touba", "National"],
     payments: "Wave, Orange Money, Free Money",
-    channels: "WhatsApp, Facebook, TikTok, Instagram, influenceurs locaux",
-    notes: "Wave domine les paiements; contenu en wolof très performant à l'oral.",
+    channels: "WhatsApp, Facebook, TikTok, Instagram, radio, influenceurs locaux",
+    notes: "Wave domine les paiements; le wolof est très performant en audio et vidéo.",
   },
-  Nigeria: {
-    languages: ["Anglais", "Pidgin", "Yoruba", "Igbo", "Hausa"],
-    payments: "Paystack, Flutterwave, virements bancaires, OPay",
-    channels: "Instagram, X, WhatsApp, TikTok, YouTube",
-    notes: "Marché très concurrentiel; sensibilité forte au prix et à la preuve sociale.",
-  },
-  Kenya: {
-    languages: ["Anglais", "Swahili"],
-    payments: "M-Pesa",
-    channels: "WhatsApp, Facebook, X, TikTok, Instagram",
-    notes: "M-Pesa est le standard; USSD et SMS restent efficaces hors Nairobi.",
-  },
-  Ghana: {
-    languages: ["Anglais", "Twi"],
-    payments: "MTN MoMo, Vodafone Cash",
-    channels: "WhatsApp, Instagram, Facebook, radio",
-    notes: "Forte culture radio et bouche-à-oreille; WhatsApp Business central.",
-  },
-  Cameroun: {
+  CM: {
+    name: "Cameroun", currency: "XAF",
     languages: ["Français", "Anglais", "Pidgin"],
+    zones: ["Douala", "Yaoundé", "Bafoussam", "National"],
     payments: "MTN MoMo, Orange Money",
     channels: "Facebook, WhatsApp, TikTok, radio",
-    notes: "Bilinguisme à gérer; Douala et Yaoundé sont les pôles principaux.",
+    notes: "Bilinguisme à gérer selon les régions; Douala et Yaoundé sont les pôles principaux.",
   },
-  Maroc: {
-    languages: ["Français", "Arabe", "Darija"],
-    payments: "Carte bancaire, CMI, cash on delivery",
-    channels: "Instagram, Facebook, TikTok, YouTube, Google",
-    notes: "Paiement à la livraison très répandu; Darija en contenu social.",
+  BF: {
+    name: "Burkina Faso", currency: "XOF",
+    languages: ["Français", "Mooré", "Dioula"],
+    zones: ["Ouagadougou", "Bobo-Dioulasso", "National"],
+    payments: "Orange Money, Moov Money",
+    channels: "Facebook, WhatsApp, radio",
+    notes: "Radio très influente; budgets marketing généralement contraints.",
   },
-  Autre: {
-    languages: [],
-    payments: "À préciser",
-    channels: "WhatsApp, Facebook, TikTok",
-    notes: "Pays non listé: adapter selon les informations fournies.",
+  ML: {
+    name: "Mali", currency: "XOF",
+    languages: ["Français", "Bambara"],
+    zones: ["Bamako", "Sikasso", "National"],
+    payments: "Orange Money, Moov Money",
+    channels: "Facebook, WhatsApp, TikTok, radio",
+    notes: "Le bambara est la langue véhiculaire; contenu audio et vidéo privilégié.",
+  },
+  BJ: {
+    name: "Bénin", currency: "XOF",
+    languages: ["Français", "Fon", "Yoruba"],
+    zones: ["Cotonou", "Porto-Novo", "Parakou", "National"],
+    payments: "MTN MoMo, Moov Money, Celtiis Cash",
+    channels: "Facebook, WhatsApp, TikTok",
+    notes: "Cotonou concentre l'activité commerciale.",
+  },
+  TG: {
+    name: "Togo", currency: "XOF",
+    languages: ["Français", "Éwé", "Kabiyè"],
+    zones: ["Lomé", "Kara", "National"],
+    payments: "T-Money, Flooz",
+    channels: "Facebook, WhatsApp, TikTok",
+    notes: "Lomé concentre l'activité commerciale.",
   },
 };
+
+export const DEFAULT_COUNTRY = "CI";
+
+export function countryContext(code: string): CountryContext {
+  return COUNTRIES[code] ?? COUNTRIES[DEFAULT_COUNTRY];
+}
