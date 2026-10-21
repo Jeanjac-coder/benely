@@ -22,6 +22,9 @@
 
 Première version de Benely, copilote IA de stratégie marketing et communication pour les entreprises africaines (marché pilote: Côte d'Ivoire).
 
+### Technique
+- Authentification côté serveur avec `@supabase/server`: le jeton de session (cookie géré par `@supabase/ssr`) est vérifié localement avec les clés publiques du projet, sans appel à Supabase Auth à chaque requête; repli automatique sur `auth.getUser()` si la vérification locale est impossible. Le client « service » est créé par `createAdminClient`.
+
 ### Fonctionnalités
 - **Comptes et organisations:** inscription avec vérification e-mail, connexion, mot de passe oublié, organisations multiples (agences), rôles propriétaire / administrateur / collaborateur, invitations par lien. Données strictement isolées entre organisations.
 - **Profil et diagnostic:** profil d'entreprise, questions complémentaires adaptées aux réponses, synthèse modifiable à valider avant génération.

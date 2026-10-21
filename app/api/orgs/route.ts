@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { COUNTRIES } from "@/lib/africa";
 import { jsonError, ORG_COOKIE } from "@/lib/context";
-import { supabaseServer } from "@/lib/supabase/server";
+import { currentUser, supabaseServer } from "@/lib/supabase/server";
 
 export async function POST(req: Request) {
   const supabase = supabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await currentUser(supabase);
   if (!user) return jsonError("Non authentifié.", 401);
   const body = await req.json().catch(() => null);
   const name = typeof body?.name === "string" ? body.name.trim() : "";

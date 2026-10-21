@@ -9,7 +9,7 @@ Référence: cahier des charges « Plateforme SaaS IA de stratégie marketing et
 | Frontend | Next.js, React, TypeScript, Tailwind, shadcn/ui | Next.js 14, React, TypeScript, CSS simple | Tailwind/shadcn à introduire avec les maquettes validées (phase UX/UI). |
 | Backend / API | Python, FastAPI | Route handlers Next.js | Une seule base de code TypeScript pour le MVP; un service Python pourra porter l'analytique V2. |
 | Données | PostgreSQL | Supabase Postgres + RLS | Isolation multi-tenant appliquée par la base elle-même. |
-| Auth / stockage | Supabase Auth / Storage | Supabase Auth et Storage | Logos des organisations dans un bucket privé, protégé par la RLS. |
+| Auth / stockage | Supabase Auth / Storage | Supabase Auth et Storage | Logos des organisations dans un bucket privé, protégé par la RLS. `@supabase/ssr` gère la session en cookie (rafraîchie par le middleware); `@supabase/server` vérifie le jeton côté serveur (JWKS) et crée le client service. |
 | IA | OpenAI, LangGraph | API Claude, workflows orchestrés en code | Décision validée au cadrage; les « agents » V1 sont des workflows spécialisés sur un même modèle (§6). |
 | Paiement | Prestataire compatible avec les pays cibles | CinetPay (Orange Money, MTN, Moov, Wave, carte; XOF) | Basé en Côte d'Ivoire. Interface `PaymentProvider`: un autre prestataire s'ajoute sans modifier le reste. |
 

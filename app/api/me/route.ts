@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { jsonError } from "@/lib/context";
-import { supabaseServer } from "@/lib/supabase/server";
+import { currentUser, supabaseServer } from "@/lib/supabase/server";
 
 /** Met à jour le prénom et le nom de l'utilisateur connecté (table profiles, protégée par RLS). */
 export async function PUT(req: Request) {
   const supabase = supabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await currentUser(supabase);
   if (!user) return jsonError("Non authentifié.", 401);
   const body = await req.json().catch(() => ({}));
   const first = typeof body.firstName === "string" ? body.firstName.trim().slice(0, 80) : "";
