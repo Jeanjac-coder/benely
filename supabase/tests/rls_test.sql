@@ -63,5 +63,10 @@ do $$ begin
   if (select count(*) from memberships where user_id = '00000000-0000-0000-0000-00000000000b') <> 1 then raise exception 'B a rejoint A'; end if;
   if (select count(*) from invitations) <> 1 then raise exception 'un membre a créé une invitation'; end if;
   if (select email from memberships where user_id = '00000000-0000-0000-0000-00000000000c') <> 'chloe@a.ci' then raise exception 'e-mail du membre non enregistré'; end if;
+  if has_function_privilege('anon', 'public.create_organization(text, text, text)', 'execute')
+     or has_function_privilege('anon', 'public.accept_invitation(uuid)', 'execute')
+     or has_function_privilege('anon', 'public.is_member(uuid)', 'execute') then
+    raise exception 'fonction privilégiée appelable sans connexion';
+  end if;
   raise notice 'RLS: tous les contrôles passent';
 end $$;

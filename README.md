@@ -3,7 +3,7 @@
 Plateforme SaaS d'IA de stratégie marketing et communication pour les entreprises africaines (marché pilote: Côte d'Ivoire, puis Afrique francophone).
 
 Stack: Next.js 14 (App Router, TypeScript) · Supabase (Auth, Postgres avec RLS) · API Claude (sortie JSON structurée et validée par Zod).
-Architecture et suivi du cahier des charges: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Version 1.0.0 — [journal des versions](CHANGELOG.md) · [mise en ligne](docs/DEPLOIEMENT.md) · [architecture et suivi du cahier des charges](docs/ARCHITECTURE.md).
 
 ## Mise en route
 
