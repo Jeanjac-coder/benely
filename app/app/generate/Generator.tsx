@@ -63,10 +63,16 @@ export function Generator({ pending }: { pending: Pending }) {
       {jobId && (
         <div className="card" aria-live="polite">
           <ol className="progress">
-            {STEPS.map((s) => (
-              <li key={s}>{done.includes(s) ? "✓" : s === current && running ? "⏳" : "○"} {STEP_LABELS[s]}</li>
-            ))}
-            <li>{running && !current ? "⏳" : "○"} Contrôle de cohérence et sauvegarde</li>
+            {STEPS.map((s, i) => {
+              const state = done.includes(s) ? "done" : s === current && running ? "current" : "todo";
+              return (
+                <li key={s} data-state={state}>
+                  <span className="state">{state === "done" ? "✓" : i + 1}</span>{STEP_LABELS[s]}
+                  {state === "current" && <span className="muted small" style={{ marginLeft: "auto" }}>en cours…</span>}
+                </li>
+              );
+            })}
+            <li data-state={running && !current ? "current" : "todo"}><span className="state">7</span>Contrôle de cohérence et sauvegarde</li>
           </ol>
           {!running && (
             <div className="row">

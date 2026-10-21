@@ -35,7 +35,7 @@ export function renderInvoice(inv: InvoiceData, seller = sellerFromEnv()): Promi
   doc.on("data", (c: Buffer) => chunks.push(c));
   const done = new Promise<Buffer>((resolve, reject) => { doc.on("end", () => resolve(Buffer.concat(chunks))); doc.on("error", reject); });
 
-  doc.font("bold").fontSize(20).fillColor("#0a6e45").text(seller.name);
+  doc.font("bold").fontSize(20).fillColor("#1010ff").text(seller.name);
   doc.font("body").fontSize(9).fillColor("#66665f");
   for (const l of seller.lines) doc.text(l);
   doc.moveDown(2).font("bold").fontSize(16).fillColor("#1b1b19").text(`Facture ${inv.number}`);
@@ -47,7 +47,7 @@ export function renderInvoice(inv: InvoiceData, seller = sellerFromEnv()): Promi
   doc.moveDown(2);
   const x = 56, w = doc.page.width - 112;
   const y = doc.y;
-  doc.rect(x, y, w, 20).fill("#e9f2ed");
+  doc.rect(x, y, w, 20).fill("#ececff");
   doc.fillColor("#1b1b19").font("bold").fontSize(10).text("Désignation", x + 6, y + 5).text("Montant", x + w - 126, y + 5, { width: 120, align: "right" });
   doc.font("body").text(`Abonnement Benely ${inv.planName}\nPériode du ${day(inv.periodStart)} au ${day(inv.periodEnd)}`, x + 6, y + 28, { width: w - 140 })
     .text(formatMoney(inv.amount, inv.currency), x + w - 126, y + 28, { width: 120, align: "right" });

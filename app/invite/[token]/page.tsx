@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { AuthLayout } from "@/components/AuthLayout";
 import { api } from "@/components/client";
 
 export default function Invite({ params }: { params: { token: string } }) {
@@ -16,13 +17,9 @@ export default function Invite({ params }: { params: { token: string } }) {
     }
   }
   return (
-    <main style={{ maxWidth: 480 }}>
-      <h1>Invitation</h1>
-      <div className="card">
-        <p>Vous avez été invité(e) à rejoindre une organisation sur Benely.</p>
-        <button onClick={accept}>Rejoindre</button>
-        {error && <p className="err">{error}</p>}
-      </div>
-    </main>
+    <AuthLayout title="Invitation" subtitle="Vous avez été invité(e) à rejoindre une organisation sur Benely.">
+      <button onClick={accept} className="btn-lg" style={{ width: "100%" }}>Rejoindre l'organisation</button>
+      {error && <p className="err">{error}</p>}
+    </AuthLayout>
   );
 }

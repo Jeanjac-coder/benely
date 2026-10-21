@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api } from "@/components/client";
+import { AuthLayout } from "@/components/AuthLayout";
 import { COUNTRIES, DEFAULT_COUNTRY } from "@/lib/africa";
 
 export default function Onboarding() {
@@ -25,18 +26,17 @@ export default function Onboarding() {
   }
 
   return (
-    <main style={{ maxWidth: 480 }}>
-      <h1>Votre organisation</h1>
-      <form className="card" onSubmit={submit}>
+    <AuthLayout title="Votre organisation" subtitle="Votre essai gratuit de 14 jours démarre dès la création.">
+      <form onSubmit={submit}>
         <label htmlFor="name">Nom de l'entreprise ou de l'agence</label>
         <input id="name" required value={name} onChange={(e) => setName(e.target.value)} />
         <label htmlFor="country">Pays principal</label>
         <select id="country" value={country} onChange={(e) => setCountry(e.target.value)}>
           {Object.entries(COUNTRIES).map(([code, c]) => <option key={code} value={code}>{c.name}</option>)}
         </select>
-        <button disabled={busy} style={{ marginTop: 14 }}>Créer</button>
+        <button disabled={busy} className="btn-lg" style={{ marginTop: 20, width: "100%" }}>Créer mon organisation</button>
         {error && <p className="err">{error}</p>}
       </form>
-    </main>
+    </AuthLayout>
   );
 }

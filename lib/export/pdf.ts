@@ -4,7 +4,7 @@ import type { Block, ExportDoc } from "./model.ts";
 
 const FONT = path.join(process.cwd(), "assets/fonts/DejaVuSans.ttf");
 const BOLD = path.join(process.cwd(), "assets/fonts/DejaVuSans-Bold.ttf");
-const ACCENT = "#0a6e45";
+const ACCENT = "#1010ff";
 const MUTED = "#66665f";
 
 /** Les sections contenant un tableau large passent en paysage. */
@@ -108,7 +108,7 @@ function table(doc: PDFKit.PDFDocument, columns: string[], rows: string[][]) {
       doc.font(header ? "bold" : "body").fontSize(size);
     }
     const y = doc.y;
-    if (header) doc.rect(x0, y, width, h).fill("#e9f2ed");
+    if (header) doc.rect(x0, y, width, h).fill("#ececff");
     let x = x0;
     cells.forEach((c, i) => {
       doc.fillColor("#1b1b19").text(c || "—", x + pad, y + pad, { width: widths[i] - 2 * pad });

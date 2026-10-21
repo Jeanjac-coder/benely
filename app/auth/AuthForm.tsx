@@ -2,11 +2,19 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { AuthLayout } from "@/components/AuthLayout";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 
 type Mode = "login" | "signup" | "reset" | "update";
 
-const TITLES: Record<Mode, string> = { login: "Connexion", signup: "Créer un compte", reset: "Mot de passe oublié", update: "Nouveau mot de passe" };
+const TITLES: Record<Mode, string> = { login: "Bon retour", signup: "Créer un compte", reset: "Mot de passe oublié", update: "Nouveau mot de passe" };
+const SUBTITLES: Record<Mode, string> = {
+  login: "Connectez-vous pour retrouver votre stratégie.",
+  signup: "14 jours d'essai gratuit, sans carte bancaire.",
+  reset: "Nous vous envoyons un lien de réinitialisation.",
+  update: "Choisissez un nouveau mot de passe (8 caractères minimum).",
+};
+const ACTIONS: Record<Mode, string> = { login: "Se connecter", signup: "Créer mon compte", reset: "Envoyer le lien", update: "Enregistrer" };
 
 export function AuthForm({ mode }: { mode: Mode }) {
   const router = useRouter();
@@ -48,18 +56,18 @@ export function AuthForm({ mode }: { mode: Mode }) {
   }
 
   return (
-    <main style={{ maxWidth: 420 }}>
-      <h1>{TITLES[mode]}</h1>
-      <form className="card" onSubmit={submit}>
+    <AuthLayout title={TITLES[mode]} subtitle={SUBTITLES[mode]}>
+      <form onSubmit={submit}>
         {mode !== "update" && (<><label htmlFor="email">E-mail</label><input id="email" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} /></>)}
         {mode !== "reset" && (<><label htmlFor="password">Mot de passe</label><input id="password" type="password" minLength={8} autoComplete={mode === "login" ? "current-password" : "new-password"} required value={password} onChange={(e) => setPassword(e.target.value)} /></>)}
-        <button disabled={busy} style={{ marginTop: 14 }}>{busy ? "Patientez…" : TITLES[mode]}</button>
+        <button disabled={busy} className="btn-lg" style={{ marginTop: 20, width: "100%" }}>{busy ? "Patientez…" : ACTIONS[mode]}</button>
         {msg && <p className={msg.ok ? "ok" : "err"} role="status">{msg.text}</p>}
       </form>
-      <p className="small">
-        {mode === "login" && <><Link href="/auth/signup">Créer un compte</Link> · <Link href="/auth/reset">Mot de passe oublié</Link></>}
-        {mode !== "login" && <Link href="/auth/login">Se connecter</Link>}
+      <p className="small" style={{ marginTop: 20 }}>
+        {mode === "login" && <>Pas encore de compte ? <Link href="/auth/signup">Créer un compte</Link> · <Link href="/auth/reset">Mot de passe oublié</Link></>}
+        {mode === "signup" && <>Déjà inscrit ? <Link href="/auth/login">Se connecter</Link></>}
+        {(mode === "reset" || mode === "update") && <Link href="/auth/login">Retour à la connexion</Link>}
       </p>
-    </main>
+    </AuthLayout>
   );
 }

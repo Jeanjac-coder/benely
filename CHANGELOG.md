@@ -1,5 +1,15 @@
 # Journal des versions
 
+## Non publié
+
+### Interface
+- Nouvelle identité visuelle selon la charte Benely: logo, palette (Electra, Almond, Tangerine, Firecracker, Whisper, Azure), typographie Inter / Inter Display.
+- Page d'accueil refondue: hero Electra avec aperçu du tableau de bord, étapes en cartes colorées, livrables, section Afrique, tarifs lus depuis la base.
+- Application: barre latérale avec icônes et page active, sélecteur d'organisation et offre en cours, onglets en pilule, barre d'étapes du profil, frise de progression de la génération, indicateurs colorés.
+- Pages d'accès (connexion, inscription, organisation, invitation) en deux colonnes avec panneau de marque.
+- Exports PDF, Word, Excel et factures aux couleurs de la charte.
+- Icône d'onglet et icône Apple à partir du symbole « B ».
+
 ## 1.0.0 — 21 octobre 2026
 
 Première version de Benely, copilote IA de stratégie marketing et communication pour les entreprises africaines (marché pilote: Côte d'Ivoire).

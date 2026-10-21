@@ -57,7 +57,13 @@ export function ProfileWizard({ initial, initialAnswers, savedSummary, validated
   return (
     <>
       <h1>Profil et diagnostic</h1>
-      <p className="muted">Étape {step} sur 3 · {["Profil de l'entreprise", "Questions complémentaires", "Synthèse à valider"][step - 1]}</p>
+      <ol className="stepper" aria-label="Étapes">
+        {["Profil de l'entreprise", "Questions complémentaires", "Synthèse à valider"].map((label, i) => (
+          <li key={label} data-state={i + 1 === step ? "current" : i + 1 < step ? "done" : "todo"} aria-current={i + 1 === step ? "step" : undefined}>
+            <span>{i + 1 < step ? "✓" : i + 1}</span>{label}
+          </li>
+        ))}
+      </ol>
 
       {step === 1 && (
         <form className="card" onSubmit={(e) => { e.preventDefault(); save(2); }}>
