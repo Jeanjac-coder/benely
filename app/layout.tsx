@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { THEME_SCRIPT } from "@/lib/theme";
 import "./globals.css";
 
@@ -24,7 +25,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fr" className={sora.variable} suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} /></head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <SpeedInsights />
+      </body>
     </html>
   );
 }
