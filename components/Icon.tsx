@@ -18,6 +18,9 @@ const PATHS = {
   alert: "M12 3 2 20h20zM12 10v4M12 17h.01",
   log: "M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01",
   arrow: "M5 12h14M13 6l6 6-6 6",
+  "arrow-up-right": "M7 17 17 7M8 7h9v9",
+  check: "M5 12.5 10 17l9-10",
+  globe: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z",
 } as const;
 
 export type IconName = keyof typeof PATHS;

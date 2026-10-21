@@ -4,24 +4,11 @@ import type { ReactNode } from "react";
 import { THEME_SCRIPT } from "@/lib/theme";
 import "./globals.css";
 
-const inter = localFont({
-  variable: "--font-inter",
+// Sora (SIL Open Font License, voir fonts/Sora-OFL.txt), fichier variable 100–800.
+const sora = localFont({
+  variable: "--font-sora",
   display: "swap",
-  src: [
-    { path: "./fonts/Inter-Regular.otf", weight: "400" },
-    { path: "./fonts/Inter-Medium.otf", weight: "500" },
-    { path: "./fonts/Inter-SemiBold.otf", weight: "600" },
-    { path: "./fonts/Inter-Bold.otf", weight: "700" },
-  ],
-});
-
-const interDisplay = localFont({
-  variable: "--font-inter-display",
-  display: "swap",
-  src: [
-    { path: "./fonts/InterDisplay-Bold.otf", weight: "700" },
-    { path: "./fonts/InterDisplay-ExtraBold.otf", weight: "800" },
-  ],
+  src: [{ path: "./fonts/Sora-Variable.woff2", weight: "100 800", style: "normal" }],
 });
 
 export const metadata: Metadata = {
@@ -30,12 +17,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [{ media: "(prefers-color-scheme: light)", color: "#29309B" }, { media: "(prefers-color-scheme: dark)", color: "#070B24" }],
+  themeColor: [{ media: "(prefers-color-scheme: light)", color: "#0077B6" }, { media: "(prefers-color-scheme: dark)", color: "#02031F" }],
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="fr" className={`${inter.variable} ${interDisplay.variable}`} suppressHydrationWarning>
+    <html lang="fr" className={sora.variable} suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} /></head>
       <body>{children}</body>
     </html>

@@ -4,7 +4,7 @@ import {
 } from "docx";
 import type { Block, ExportDoc } from "./model.ts";
 
-const ACCENT = "1010FF";
+const ACCENT = "0077B6";
 const wide = (blocks: Block[]) => blocks.some((b) => b.kind === "table" && b.columns.length >= 6);
 const lines = (text: string, bold = false) => text.split("\n").map((t, i) => new TextRun({ text: t, bold, break: i > 0 ? 1 : 0 }));
 
@@ -16,7 +16,7 @@ function blockToDocx(b: Block): (Paragraph | Table)[] {
   const border = { style: BorderStyle.SINGLE, size: 2, color: "D9D8D0" };
   const cell = (text: string, header: boolean) => new TableCell({
     children: [new Paragraph({ children: lines(text || "—", header) })],
-    shading: header ? { type: ShadingType.CLEAR, color: "auto", fill: "ECECFF" } : undefined,
+    shading: header ? { type: ShadingType.CLEAR, color: "auto", fill: "E3F4FA" } : undefined,
     borders: { top: border, bottom: border, left: border, right: border },
     margins: { top: 40, bottom: 40, left: 60, right: 60 },
   });
@@ -37,7 +37,7 @@ export async function renderDocx(d: ExportDoc): Promise<Buffer> {
   const footer = new Footer({
     children: [new Paragraph({
       alignment: AlignmentType.CENTER,
-      children: [new TextRun({ text: `${d.company} · ${d.title} · Benely · page `, size: 16, color: "66665F" }), new TextRun({ children: [PageNumber.CURRENT], size: 16, color: "66665F" })],
+      children: [new TextRun({ text: `${d.company} · ${d.title} · Benely · page `, size: 16, color: "5B6788" }), new TextRun({ children: [PageNumber.CURRENT], size: 16, color: "5B6788" })],
     })],
   });
 
@@ -49,8 +49,8 @@ export async function renderDocx(d: ExportDoc): Promise<Buffer> {
   cover.push(
     new Paragraph({ heading: HeadingLevel.TITLE, children: [new TextRun(d.company)] }),
     new Paragraph({ children: [new TextRun({ text: d.title, size: 36, color: ACCENT })], spacing: { after: 200 } }),
-    new Paragraph({ children: [new TextRun({ text: d.subtitle, color: "66665F" })] }),
-    new Paragraph({ children: [new TextRun({ text: `Document généré le ${d.generatedAt}`, color: "66665F" })], spacing: { after: 400 } }),
+    new Paragraph({ children: [new TextRun({ text: d.subtitle, color: "5B6788" })] }),
+    new Paragraph({ children: [new TextRun({ text: `Document généré le ${d.generatedAt}`, color: "5B6788" })], spacing: { after: 400 } }),
     new Paragraph({ children: [new TextRun({ text: "Les estimations et prévisions de ce document ne constituent pas des résultats garantis. Les affirmations sont qualifiées de fait, estimation ou hypothèse.", size: 18, italics: true })] }),
   );
 
