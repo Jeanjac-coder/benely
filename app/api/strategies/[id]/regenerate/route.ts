@@ -5,6 +5,8 @@ import { runStep } from "@/lib/ai/pipeline";
 import { STEPS, type Deliverables, type Step } from "@/lib/ai/schemas";
 import { validatePeriod } from "@/lib/calendar";
 import { apiContext, jsonError } from "@/lib/context";
+import { checkQuota, recordQuotaUse } from "@/lib/billing/server";
+import { logEvent } from "@/lib/events";
 import { loadJobInput } from "@/lib/jobs";
 import { latestStrategy, recordUsage, saveVersion } from "@/lib/repo";
 
@@ -28,6 +30,8 @@ export async function POST(req: Request, { params }: { params: { id: string } })
   if (invalid) return jsonError(invalid);
   const input = await loadJobInput(ctx, period);
   if (typeof input === "string") return jsonError(input);
+  const quota = await checkQuota(ctx, "regenerations");
+  if (quota) return jsonError(quota, 402);
   // Le budget de la stratégie (éventuellement modifié) prime sur celui du profil.
   input.profile = { ...input.profile, monthlyBudget: d.meta.monthlyBudget };
 
@@ -38,9 +42,11 @@ export async function POST(req: Request, { params }: { params: { id: string } })
     await recordUsage(ctx, null, `regenerate:${step}`, r.usage);
     const next: Deliverables = { ...d, [step]: r.outputs[step], meta: { ...meta, period, sources: r.outputs._sources ?? meta.sources } };
     const version = await saveVersion(ctx, params.id, next, checkCoherence(next), "regeneration", `Régénération: ${step}`);
+    await recordQuotaUse(ctx, "regenerations");
     return NextResponse.json({ version });
   } catch (e) {
     const err = toAiError(e);
+    await logEvent("error", "generation", `Régénération ${step}: ${err.message}`, { orgId: ctx.org.id, details: { error: e } });
     return NextResponse.json({ error: err.message, retryable: err.retryable }, { status: 502 });
   }
 }

@@ -4,6 +4,7 @@ import { toAiError } from "@/lib/ai/client";
 import { assemble, nextStep, runStep, type JobOutputs } from "@/lib/ai/pipeline";
 import type { JobInput } from "@/lib/ai/prompts";
 import { apiContext, jsonError } from "@/lib/context";
+import { logEvent } from "@/lib/events";
 import { recordUsage, saveVersion } from "@/lib/repo";
 
 export const maxDuration = 300;
@@ -54,8 +55,8 @@ export async function POST(_: Request, { params }: { params: { id: string } }) {
     await ctx.supabase.from("generation_jobs").update({ status: "succeeded", outputs, strategy_id: strategy.id, current_step: null, updated_at: new Date().toISOString() }).eq("id", job.id);
     return NextResponse.json({ status: "succeeded", strategyId: strategy.id });
   } catch (e) {
-    console.error("generation step failed", { job: job.id, step, e });
     const err = toAiError(e);
+    await logEvent("error", "generation", `Étape ${step ?? "finale"}: ${err.message}`, { orgId: ctx.org.id, details: { job: job.id, error: e } });
     await ctx.supabase.from("generation_jobs").update({ status: "failed", outputs, error: err.message, updated_at: new Date().toISOString() }).eq("id", job.id);
     return NextResponse.json({ status: "failed", step, error: err.message, retryable: err.retryable }, { status: 502 });
   }

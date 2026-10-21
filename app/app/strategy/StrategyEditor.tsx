@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api } from "@/components/client";
+import { ExportMenu } from "@/components/ExportMenu";
 import { ValueEditor } from "@/components/ValueEditor";
 import { ValueView } from "@/components/ValueView";
 import { STEP_LABELS, STEPS, type Deliverables, type Step } from "@/lib/ai/schemas";
@@ -39,6 +40,7 @@ export function StrategyEditor({ strategyId, title, version, versions }: {
     <>
       <h1>{title}</h1>
       <p className="muted small">Version {version.version} · {SOURCES[version.source]} · {new Date(version.created_at).toLocaleString("fr-FR")}</p>
+      <ExportMenu label="Dossier complet" />
       <div className="row" role="tablist">
         {STEPS.map((s) => (
           <button key={s} role="tab" aria-selected={tab === s} className={tab === s ? "" : "ghost"} onClick={() => setTab(s)} disabled={draft !== null && tab !== s}>{STEP_LABELS[s]}</button>
@@ -72,6 +74,7 @@ export function StrategyEditor({ strategyId, title, version, versions }: {
             </div>
           )}
         </div>
+        {!draft && <ExportMenu sections={tab} label="Ce livrable" />}
         {draft
           ? <ValueEditor value={d[tab]} path={tab} onChange={(v) => setDraft({ ...d, [tab]: v } as Deliverables)} />
           : <ValueView value={d[tab]} />}
