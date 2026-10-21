@@ -1,6 +1,7 @@
 import { normalizeShares } from "../budget.ts";
 import { countryContext } from "../africa.ts";
 import { generateStructured, type Usage } from "./client.ts";
+import { expertiseBlock } from "./expertise.ts";
 import { buildContext, instruction, SYSTEM, type JobInput } from "./prompts.ts";
 import { RESEARCH_ENABLED, webResearch } from "./research.ts";
 import { STEP_SCHEMAS, STEPS, type Deliverables, type Source, type Step, type StepOutputs } from "./schemas.ts";
@@ -24,7 +25,9 @@ export async function runStep(step: Step, input: JobInput, outputs: JobOutputs, 
     sources = r.sources;
     usage.push(r.usage);
   }
-  const { data, usage: u } = await generate(STEP_SCHEMAS[step], SYSTEM, buildContext(input), instruction(step, input, outputs, research));
+  // Méthode des experts d'abord, consigne de l'étape en dernier: c'est elle qui fixe le livrable.
+  const ask = `${expertiseBlock(step)}\n\n## Consigne\n${instruction(step, input, outputs, research)}`;
+  const { data, usage: u } = await generate(STEP_SCHEMAS[step], SYSTEM, buildContext(input), ask);
   usage.push(u);
   const output = step === "media" ? { ...data, channels: normalizeShares((data as StepOutputs["media"]).channels) } : data;
   return { outputs: { ...outputs, [step]: output, _sources: sources }, usage };

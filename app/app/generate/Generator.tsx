@@ -10,7 +10,8 @@ import { presetPeriod, today } from "@/lib/calendar";
 type Pending = { id: string; status: string; error: string | null; completed: Step[] } | null;
 type RunResult = { status: string; step?: Step; strategyId?: string; error?: string; busy?: boolean };
 
-export function Generator({ pending }: { pending: Pending }) {
+/** `experts`: noms des fiches d'experts mobilisées à chaque étape (calculés côté serveur). */
+export function Generator({ pending, experts }: { pending: Pending; experts: Record<Step, string[]> }) {
   const router = useRouter();
   const [period, setPeriod] = useState(presetPeriod("30j", today()));
   const [jobId, setJobId] = useState(pending?.id ?? null);
@@ -58,6 +59,7 @@ export function Generator({ pending }: { pending: Pending }) {
         <div className="card">
           <Mascot pose="point" height={120} motion="sway" style={{ float: "right", marginLeft: 12 }} />
           <p>La génération enchaîne six étapes et prend généralement quelques minutes. Vous pouvez quitter la page: la progression est conservée.</p>
+          <p className="muted small">Chaque étape mobilise des experts spécialisés (stratège de croissance, gardien de marque, stratège TikTok, créateur de contenu…) dont la méthode guide l'IA.</p>
           <PeriodPicker value={period} onChange={setPeriod} />
           <button onClick={start} disabled={running} style={{ marginTop: 14 }}>Lancer la génération</button>
         </div>
@@ -75,7 +77,8 @@ export function Generator({ pending }: { pending: Pending }) {
               const state = done.includes(s) ? "done" : s === current && running ? "current" : "todo";
               return (
                 <li key={s} data-state={state}>
-                  <span className="state">{state === "done" ? "✓" : i + 1}</span>{STEP_LABELS[s]}
+                  <span className="state">{state === "done" ? "✓" : i + 1}</span>
+                  <span className="grow">{STEP_LABELS[s]}<small className="experts">{experts[s].join(" · ")}</small></span>
                   {state === "current" && <span className="muted small" style={{ marginLeft: "auto" }}>en cours…</span>}
                 </li>
               );

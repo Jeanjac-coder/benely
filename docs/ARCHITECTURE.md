@@ -94,3 +94,11 @@ L'administration n'affiche que des métadonnées: profils et stratégies des cli
 | T10 Paiement | `supabase/tests/billing_test.sql` (activation après confirmation, idempotence, renouvellement, échec, expiration, tentatives client refusées) et `tests/billing.test.ts` (intégration CinetPay simulée). À valider avec un compte CinetPay de test. |
 | T11 Isolation | `supabase/tests/rls_test.sql`. |
 | T13 Erreur IA | `tests/pipeline.test.ts` + messages et relance dans l'interface. |
+
+## Experts IA (agency-agents)
+
+Pour élever la qualité des livrables, chaque étape de génération reçoit, avant sa consigne, la méthode de 2 à 4 experts issus de [agency-agents](https://github.com/msitarzewski/agency-agents) (licence MIT, voir `lib/ai/agents/LICENSE-agency-agents.txt`).
+
+- `scripts/sync-agents.mjs` condense les fiches retenues (identité, missions, règles, cadres, critères de réussite; sans outillage ni gabarits de code) dans `lib/ai/agents.generated.ts`. Mise à jour: cloner le dépôt puis `npm run agents:sync <chemin>`.
+- `lib/ai/expertise.ts` associe les experts aux étapes (`STEP_AGENTS`) et construit le bloc injecté. Il demande d'adapter ces méthodes au marché local et rappelle que les principes de Benely et le format de sortie priment.
+- Coût: environ 2 500 à 4 500 jetons d'entrée supplémentaires par étape, suivis comme le reste dans `ai_usage`.

@@ -2,6 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { checkCoherence } from "../lib/ai/coherence.ts";
 import { AiError } from "../lib/ai/client.ts";
+import { AGENTS } from "../lib/ai/agents.generated.ts";
+import { STEP_AGENTS, stepExperts } from "../lib/ai/expertise.ts";
 import { assemble, nextStep, runStep, type JobOutputs } from "../lib/ai/pipeline.ts";
 import type { JobInput } from "../lib/ai/prompts.ts";
 import { STEPS, type Step } from "../lib/ai/schemas.ts";
@@ -32,6 +34,11 @@ test("enchaîne les six étapes, chacune recevant les livrables précédents, pu
   assert.deepEqual(seen.map((s) => s.step), [...STEPS]);
   assert.match(seen[2].instruction, /Livrable déjà produit: market/);
   assert.match(seen[5].instruction, /Livrable déjà produit: media/);
+  // Chaque étape reçoit la méthode de ses experts, puis la consigne en dernier.
+  assert.match(seen[3].instruction, /### Brand Guardian/);
+  assert.match(seen[4].instruction, /### Ad Creative Strategist/);
+  assert.match(seen[5].instruction, /### Content Creator/);
+  for (const s of seen) assert.ok(s.instruction.indexOf("## Consigne") > s.instruction.indexOf("## Méthode des experts"));
   const d = assemble(input, outputs);
   assert.deepEqual(d.media.channels.map((c) => c.budgetShare), [0.6, 0.4]);
   assert.equal(d.meta.monthlyBudget, 200_000);
@@ -51,4 +58,14 @@ test("T13: une étape en échec laisse les précédentes intactes et se relance"
 
 test("assemble refuse une génération incomplète", () => {
   assert.throws(() => assemble(input, { diagnostic: sample().diagnostic }), /Étape manquante: market/);
+});
+
+test("experts: chaque étape mobilise des fiches existantes et non vides", () => {
+  for (const step of STEPS) {
+    assert.ok(STEP_AGENTS[step].length >= 2, step);
+    for (const id of STEP_AGENTS[step]) assert.ok(AGENTS[id].text.length > 500, id);
+    assert.equal(stepExperts(step).length, STEP_AGENTS[step].length);
+  }
+  // Les gabarits de code et l'outillage sont écartés du texte injecté.
+  for (const a of Object.values(AGENTS)) assert.doesNotMatch(a.text, /```/);
 });
