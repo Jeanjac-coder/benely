@@ -1,5 +1,6 @@
 import { requireContext } from "@/lib/context";
 import { LogoForm } from "./LogoForm";
+import { ProfileForm } from "./ProfileForm";
 
 export default async function SettingsPage() {
   const ctx = await requireContext();
@@ -11,9 +12,13 @@ export default async function SettingsPage() {
   }
   return (
     <>
-      <h1>Paramètres — {ctx.org.name}</h1>
+      <h1>Paramètres</h1>
       <div className="card">
-        <h2>Logo des exports</h2>
+        <h2>Mon profil</h2>
+        <ProfileForm firstName={ctx.firstName} lastName={ctx.lastName} email={ctx.email} />
+      </div>
+      <div className="card">
+        <h2>Logo des exports — {ctx.org.name}</h2>
         <p className="muted small">Le logo et le nom de l'entreprise figurent sur la couverture des exports PDF, Word et Excel.</p>
         {logoUrl && <img src={logoUrl} alt={`Logo ${ctx.org.name}`} style={{ maxHeight: 80, maxWidth: 240, display: "block", margin: "8px 0" }} />}
         {ctx.role === "member" ? <p className="muted">Seuls le propriétaire et les administrateurs peuvent modifier le logo.</p> : <LogoForm hasLogo={!!org?.logo_path} />}

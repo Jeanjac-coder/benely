@@ -4,8 +4,8 @@ import type { Block, ExportDoc } from "./model.ts";
 
 const FONT = path.join(process.cwd(), "assets/fonts/DejaVuSans.ttf");
 const BOLD = path.join(process.cwd(), "assets/fonts/DejaVuSans-Bold.ttf");
-const ACCENT = "#0a6e45";
-const MUTED = "#66665f";
+const ACCENT = "#0f11f4";
+const MUTED = "#5B6788";
 
 /** Les sections contenant un tableau large passent en paysage. */
 const wide = (blocks: Block[]) => blocks.some((b) => b.kind === "table" && b.columns.length >= 6);
@@ -25,7 +25,7 @@ export function renderPdf(d: ExportDoc, opts: { compress?: boolean } = {}): Prom
     doc.image(Buffer.from(d.logo.data), 50, 80, { fit: [w, h] });
     y = 200;
   }
-  doc.font("bold").fontSize(26).fillColor("#1b1b19").text(d.company, 50, y, { width: doc.page.width - 100 });
+  doc.font("bold").fontSize(26).fillColor("#0a1238").text(d.company, 50, y, { width: doc.page.width - 100 });
   doc.moveDown(0.5).font("body").fontSize(18).fillColor(ACCENT).text(d.title);
   doc.moveDown(0.5).fontSize(11).fillColor(MUTED).text(d.subtitle).text(`Document généré le ${d.generatedAt}`);
   doc.moveDown(2).fontSize(9).text("Les estimations et prévisions de ce document ne constituent pas des résultats garantis. Les affirmations sont qualifiées de fait, estimation ou hypothèse.", { width: 400 });
@@ -58,7 +58,7 @@ function ensureSpace(doc: PDFKit.PDFDocument, h: number) {
 function label(doc: PDFKit.PDFDocument, text?: string) {
   if (!text) return;
   ensureSpace(doc, 40);
-  doc.font("bold").fontSize(11).fillColor("#1b1b19").text(text, doc.page.margins.left);
+  doc.font("bold").fontSize(11).fillColor("#0a1238").text(text, doc.page.margins.left);
   doc.moveDown(0.2);
 }
 
@@ -71,11 +71,11 @@ function block(doc: PDFKit.PDFDocument, b: Block) {
     doc.moveDown(0.3);
   } else if (b.kind === "p") {
     label(doc, b.label);
-    doc.font("body").fontSize(10).fillColor("#1b1b19").text(b.text, x, doc.y, { width, lineGap: 2 });
+    doc.font("body").fontSize(10).fillColor("#0a1238").text(b.text, x, doc.y, { width, lineGap: 2 });
     doc.moveDown(0.6);
   } else if (b.kind === "list") {
     label(doc, b.label);
-    doc.font("body").fontSize(10).fillColor("#1b1b19").list(b.items, x + 8, doc.y, { width: width - 8, bulletRadius: 1.8, lineGap: 2, textIndent: 10 });
+    doc.font("body").fontSize(10).fillColor("#0a1238").list(b.items, x + 8, doc.y, { width: width - 8, bulletRadius: 1.8, lineGap: 2, textIndent: 10 });
     doc.moveDown(0.6);
   } else {
     label(doc, b.label);
@@ -108,10 +108,10 @@ function table(doc: PDFKit.PDFDocument, columns: string[], rows: string[][]) {
       doc.font(header ? "bold" : "body").fontSize(size);
     }
     const y = doc.y;
-    if (header) doc.rect(x0, y, width, h).fill("#e9f2ed");
+    if (header) doc.rect(x0, y, width, h).fill("#e7e8fe");
     let x = x0;
     cells.forEach((c, i) => {
-      doc.fillColor("#1b1b19").text(c || "—", x + pad, y + pad, { width: widths[i] - 2 * pad });
+      doc.fillColor("#0a1238").text(c || "—", x + pad, y + pad, { width: widths[i] - 2 * pad });
       x += widths[i];
     });
     doc.moveTo(x0, y + h).lineTo(x0 + width, y + h).lineWidth(0.4).strokeColor("#d9d8d0").stroke();

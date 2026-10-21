@@ -35,10 +35,10 @@ export function renderInvoice(inv: InvoiceData, seller = sellerFromEnv()): Promi
   doc.on("data", (c: Buffer) => chunks.push(c));
   const done = new Promise<Buffer>((resolve, reject) => { doc.on("end", () => resolve(Buffer.concat(chunks))); doc.on("error", reject); });
 
-  doc.font("bold").fontSize(20).fillColor("#0a6e45").text(seller.name);
-  doc.font("body").fontSize(9).fillColor("#66665f");
+  doc.font("bold").fontSize(20).fillColor("#0f11f4").text(seller.name);
+  doc.font("body").fontSize(9).fillColor("#5B6788");
   for (const l of seller.lines) doc.text(l);
-  doc.moveDown(2).font("bold").fontSize(16).fillColor("#1b1b19").text(`Facture ${inv.number}`);
+  doc.moveDown(2).font("bold").fontSize(16).fillColor("#0a1238").text(`Facture ${inv.number}`);
   doc.font("body").fontSize(10).text(`Date d'émission: ${day(inv.issuedAt)}`);
   doc.moveDown().font("bold").text("Facturé à");
   doc.font("body").text(inv.billedTo);
@@ -47,15 +47,15 @@ export function renderInvoice(inv: InvoiceData, seller = sellerFromEnv()): Promi
   doc.moveDown(2);
   const x = 56, w = doc.page.width - 112;
   const y = doc.y;
-  doc.rect(x, y, w, 20).fill("#e9f2ed");
-  doc.fillColor("#1b1b19").font("bold").fontSize(10).text("Désignation", x + 6, y + 5).text("Montant", x + w - 126, y + 5, { width: 120, align: "right" });
+  doc.rect(x, y, w, 20).fill("#e7e8fe");
+  doc.fillColor("#0a1238").font("bold").fontSize(10).text("Désignation", x + 6, y + 5).text("Montant", x + w - 126, y + 5, { width: 120, align: "right" });
   doc.font("body").text(`Abonnement Benely ${inv.planName}\nPériode du ${day(inv.periodStart)} au ${day(inv.periodEnd)}`, x + 6, y + 28, { width: w - 140 })
     .text(formatMoney(inv.amount, inv.currency), x + w - 126, y + 28, { width: 120, align: "right" });
   doc.moveTo(x, y + 62).lineTo(x + w, y + 62).strokeColor("#d9d8d0").stroke();
   doc.font("bold").text("Total", x + 6, y + 72).text(formatMoney(inv.amount, inv.currency), x + w - 126, y + 72, { width: 120, align: "right" });
-  doc.font("body").fontSize(9).fillColor("#66665f").text(seller.vatNote, x + 6, y + 92);
+  doc.font("body").fontSize(9).fillColor("#5B6788").text(seller.vatNote, x + 6, y + 92);
 
-  doc.moveDown(3).fontSize(10).fillColor("#1b1b19")
+  doc.moveDown(3).fontSize(10).fillColor("#0a1238")
     .text(`Payée${inv.method ? ` par ${inv.method}` : ""} — transaction ${inv.transactionId}.`, x);
   doc.end();
   return done;

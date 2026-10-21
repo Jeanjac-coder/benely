@@ -41,9 +41,9 @@ export function StrategyEditor({ strategyId, title, version, versions }: {
       <h1>{title}</h1>
       <p className="muted small">Version {version.version} · {SOURCES[version.source]} · {new Date(version.created_at).toLocaleString("fr-FR")}</p>
       <ExportMenu label="Dossier complet" />
-      <div className="row" role="tablist">
+      <div className="tabs" role="tablist" style={{ margin: "16px 0 4px" }}>
         {STEPS.map((s) => (
-          <button key={s} role="tab" aria-selected={tab === s} className={tab === s ? "" : "ghost"} onClick={() => setTab(s)} disabled={draft !== null && tab !== s}>{STEP_LABELS[s]}</button>
+          <button key={s} role="tab" aria-selected={tab === s} onClick={() => setTab(s)} disabled={draft !== null && tab !== s}>{STEP_LABELS[s]}</button>
         ))}
       </div>
 

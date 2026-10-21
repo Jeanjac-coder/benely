@@ -21,13 +21,13 @@ do $$ begin
 end $$;
 
 insert into payments (org_id, plan_id, transaction_id, amount, currency, provider, created_by)
-  values (:'org', 'business', 'TX1', 19900, 'XOF', 'cinetpay', auth.uid());
+  values (:'org', 'business', 'TX1', 14900, 'XOF', 'cinetpay', auth.uid());
 
 -- Tentatives interdites au navigateur
 \set ON_ERROR_STOP off
 select public.confirm_payment('TX1', 'OM', '{}');
 insert into payments (org_id, plan_id, transaction_id, amount, currency, status, provider, created_by)
-  values (:'org', 'business', 'TX-FRAUDE', 19900, 'XOF', 'accepted', 'cinetpay', auth.uid());
+  values (:'org', 'business', 'TX-FRAUDE', 14900, 'XOF', 'accepted', 'cinetpay', auth.uid());
 update subscriptions set status = 'active', plan_id = 'enterprise';
 update payments set status = 'accepted';
 update plans set price_monthly = 1;
@@ -69,7 +69,7 @@ select :'second' = 'already_accepted' as idempotent \gset
 
 -- Renouvellement anticipé: la période est prolongée à partir de l'échéance
 insert into payments (org_id, plan_id, transaction_id, amount, currency, provider, created_by)
-  values (:'org', 'business', 'TX2', 19900, 'XOF', 'cinetpay', '00000000-0000-0000-0000-0000000000a1');
+  values (:'org', 'business', 'TX2', 14900, 'XOF', 'cinetpay', '00000000-0000-0000-0000-0000000000a1');
 select current_period_end as end1 from subscriptions \gset
 select public.confirm_payment('TX2', 'WAVE', '{}');
 do $$ begin

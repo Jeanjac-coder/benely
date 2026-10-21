@@ -2,21 +2,21 @@ import "server-only";
 import { notFound } from "next/navigation";
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "./supabase/admin";
-import { supabaseServer } from "./supabase/server";
+import { currentUser, supabaseServer } from "./supabase/server";
 
 /** Super-administrateur de la plateforme (table platform_admins). Les autres reçoivent une 404. */
 export async function requireAdmin(): Promise<{ userId: string; email: string }> {
   const supabase = supabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await currentUser(supabase);
   if (!user) notFound();
   const { data: ok } = await supabase.rpc("is_platform_admin");
   if (!ok) notFound();
-  return { userId: user.id, email: user.email ?? "" };
+  return { userId: user.id, email: user.email };
 }
 
 export async function apiAdmin(): Promise<{ userId: string } | NextResponse> {
   const supabase = supabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await currentUser(supabase);
   const { data: ok } = user ? await supabase.rpc("is_platform_admin") : { data: false };
   if (!user || !ok) return NextResponse.json({ error: "Introuvable." }, { status: 404 });
   return { userId: user.id };

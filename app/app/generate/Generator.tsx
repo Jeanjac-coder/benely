@@ -3,13 +3,15 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api } from "@/components/client";
 import { STEP_LABELS, STEPS, type Step } from "@/lib/ai/schemas";
+import { Mascot } from "@/components/Mascot";
 import { PeriodPicker } from "@/components/PeriodPicker";
 import { presetPeriod, today } from "@/lib/calendar";
 
 type Pending = { id: string; status: string; error: string | null; completed: Step[] } | null;
 type RunResult = { status: string; step?: Step; strategyId?: string; error?: string; busy?: boolean };
 
-export function Generator({ pending }: { pending: Pending }) {
+/** `experts`: noms des fiches d'experts mobilisées à chaque étape (calculés côté serveur). */
+export function Generator({ pending, experts }: { pending: Pending; experts: Record<Step, string[]> }) {
   const router = useRouter();
   const [period, setPeriod] = useState(presetPeriod("30j", today()));
   const [jobId, setJobId] = useState(pending?.id ?? null);
@@ -55,18 +57,33 @@ export function Generator({ pending }: { pending: Pending }) {
       <h1>Génération de la stratégie</h1>
       {!jobId && (
         <div className="card">
+          <Mascot pose="point" height={120} motion="sway" style={{ float: "right", marginLeft: 12 }} />
           <p>La génération enchaîne six étapes et prend généralement quelques minutes. Vous pouvez quitter la page: la progression est conservée.</p>
+          <p className="muted small">Chaque étape mobilise des experts spécialisés (stratège de croissance, gardien de marque, stratège TikTok, créateur de contenu…) dont la méthode guide l'IA.</p>
           <PeriodPicker value={period} onChange={setPeriod} />
           <button onClick={start} disabled={running} style={{ marginTop: 14 }}>Lancer la génération</button>
         </div>
       )}
       {jobId && (
         <div className="card" aria-live="polite">
+          <div className="row" style={{ alignItems: "flex-end", marginBottom: 14 }}>
+            <Mascot pose={error ? "surprised" : running ? "think" : "happy"} height={110} motion={running ? "sway" : "float"} />
+            <p className="grow" style={{ margin: 0, fontWeight: 600 }}>
+              {error ? "Oups, une étape a échoué. Rien n'est perdu: relancez-la." : running ? "Je travaille sur votre stratégie… vous pouvez quitter la page." : "Génération en pause: reprenez quand vous voulez."}
+            </p>
+          </div>
           <ol className="progress">
-            {STEPS.map((s) => (
-              <li key={s}>{done.includes(s) ? "✓" : s === current && running ? "⏳" : "○"} {STEP_LABELS[s]}</li>
-            ))}
-            <li>{running && !current ? "⏳" : "○"} Contrôle de cohérence et sauvegarde</li>
+            {STEPS.map((s, i) => {
+              const state = done.includes(s) ? "done" : s === current && running ? "current" : "todo";
+              return (
+                <li key={s} data-state={state}>
+                  <span className="state">{state === "done" ? "✓" : i + 1}</span>
+                  <span className="grow">{STEP_LABELS[s]}<small className="experts">{experts[s].join(" · ")}</small></span>
+                  {state === "current" && <span className="muted small" style={{ marginLeft: "auto" }}>en cours…</span>}
+                </li>
+              );
+            })}
+            <li data-state={running && !current ? "current" : "todo"}><span className="state">7</span>Contrôle de cohérence et sauvegarde</li>
           </ol>
           {!running && (
             <div className="row">

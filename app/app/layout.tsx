@@ -1,13 +1,22 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { daysLeft, effectiveStatus } from "@/lib/billing/plans";
+import { AppShell, type NavItem } from "@/components/AppShell";
+import { daysLeft, effectiveStatus, STATUS_LABELS } from "@/lib/billing/plans";
 import { requireContext } from "@/lib/context";
 import { OrgSwitcher } from "./OrgSwitcher";
 
-const LINKS = [
-  ["/app", "Tableau de bord"], ["/app/profile", "Profil"], ["/app/generate", "Génération"], ["/app/strategy", "Stratégie"],
-  ["/app/calendar", "Calendrier"], ["/app/budget", "Budget"], ["/app/performance", "Performances"], ["/app/team", "Équipe"], ["/app/billing", "Abonnement"], ["/app/settings", "Paramètres"],
-] as const;
+const ITEMS: NavItem[] = [
+  { href: "/app", label: "Tableau de bord", icon: "home" },
+  { href: "/app/profile", label: "Profil", icon: "profile" },
+  { href: "/app/generate", label: "Génération", icon: "spark" },
+  { href: "/app/strategy", label: "Stratégie", icon: "strategy" },
+  { href: "/app/calendar", label: "Calendrier", icon: "calendar" },
+  { href: "/app/budget", label: "Budget", icon: "wallet" },
+  { href: "/app/performance", label: "Performances", icon: "chart" },
+  { href: "/app/team", label: "Équipe", icon: "team" },
+  { href: "/app/billing", label: "Abonnement", icon: "card" },
+  { href: "/app/settings", label: "Paramètres", icon: "settings" },
+];
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const ctx = await requireContext();
@@ -22,18 +31,16 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     : status === "past_due" ? "Votre abonnement est échu: renouvelez-le pour conserver l'accès."
     : (status === "trialing" || (status === "active" && !sub?.cancel_at_period_end)) && left <= 5 ? `${status === "trialing" ? "Votre essai" : "Votre abonnement"} se termine dans ${Math.max(0, left)} jour(s).`
     : null;
+  const items = isAdmin ? [...ITEMS, { href: "/admin", label: "Administration", icon: "shield" as const }] : ITEMS;
+  const plan = sub && status ? `${sub.plan_id === "trial" ? "Essai" : sub.plan_id} · ${STATUS_LABELS[status]}` : undefined;
   return (
-    <>
-      <header className="topbar">
-        <Link href="/app" className="brand">Benely</Link>
-        <nav className="nav" aria-label="Navigation principale">
-          {LINKS.map(([href, text]) => <Link key={href} href={href}>{text}</Link>)}
-          {isAdmin && <Link href="/admin">Administration</Link>}
-        </nav>
-        <OrgSwitcher orgs={ctx.orgs} current={ctx.org.id} />
-      </header>
-      {banner && <div className="banner" role="status">{banner} <Link href="/app/billing">Gérer l'abonnement</Link></div>}
-      <main>{children}</main>
-    </>
+    <AppShell
+      items={items}
+      home="/app"
+      foot={<OrgSwitcher orgs={ctx.orgs} current={ctx.org.id} plan={plan} user={{ name: `${ctx.firstName} ${ctx.lastName}`.trim(), email: ctx.email }} />}
+      banner={banner && <div className="banner" role="status">{banner} <Link href="/app/billing">Gérer l'abonnement</Link></div>}
+    >
+      {children}
+    </AppShell>
   );
 }

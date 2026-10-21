@@ -8,10 +8,12 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --no-warnings --test tests/*.test.ts",
-    "test:db": "supabase/tests/run.sh"
+    "test:db": "supabase/tests/run.sh",
+    "agents:sync": "node scripts/sync-agents.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.137.0",
+    "@supabase/server": "^1.9.2",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.118.0",
     "docx": "^9.13.0",

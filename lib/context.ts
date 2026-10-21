@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
-import { supabaseServer } from "./supabase/server";
+import { currentUser, supabaseServer } from "./supabase/server";
 
 export const ORG_COOKIE = "benely_org";
 export type Role = "owner" | "admin" | "member";
@@ -10,6 +10,9 @@ export interface OrgContext {
   supabase: ReturnType<typeof supabaseServer>;
   userId: string;
   email: string;
+  /** Prénom et nom (table profiles), vides si non renseignés. */
+  firstName: string;
+  lastName: string;
   org: { id: string; name: string; country: string; currency: string };
   role: Role;
   orgs: { id: string; name: string; role: Role }[];
@@ -21,13 +24,12 @@ export interface OrgContext {
  */
 export async function getContext(): Promise<OrgContext | null> {
   const supabase = supabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await currentUser(supabase);
   if (!user) return null;
-  const { data: rows } = await supabase
-    .from("memberships")
-    .select("role, organizations(id, name, country, currency)")
-    .eq("user_id", user.id)
-    .order("created_at");
+  const [{ data: rows }, { data: profile }] = await Promise.all([
+    supabase.from("memberships").select("role, organizations(id, name, country, currency)").eq("user_id", user.id).order("created_at"),
+    supabase.from("profiles").select("first_name, last_name").eq("id", user.id).maybeSingle(),
+  ]);
   const orgs = (rows ?? []).flatMap((r) => {
     const o = r.organizations as unknown as OrgContext["org"] | null;
     return o ? [{ ...o, role: r.role as Role }] : [];
@@ -36,7 +38,8 @@ export async function getContext(): Promise<OrgContext | null> {
   const wanted = cookies().get(ORG_COOKIE)?.value;
   const active = orgs.find((o) => o.id === wanted) ?? orgs[0];
   return {
-    supabase, userId: user.id, email: user.email ?? "",
+    supabase, userId: user.id, email: user.email,
+    firstName: profile?.first_name ?? "", lastName: profile?.last_name ?? "",
     org: { id: active.id, name: active.name, country: active.country, currency: active.currency },
     role: active.role,
     orgs: orgs.map((o) => ({ id: o.id, name: o.name, role: o.role })),
@@ -47,8 +50,7 @@ export async function getContext(): Promise<OrgContext | null> {
 export async function requireContext(): Promise<OrgContext> {
   const ctx = await getContext();
   if (ctx) return ctx;
-  const { data: { user } } = await supabaseServer().auth.getUser();
-  redirect(user ? "/onboarding" : "/auth/login");
+  redirect((await currentUser()) ? "/onboarding" : "/auth/login");
 }
 
 /** Pour les routes API: renvoie le contexte ou une réponse d'erreur JSON. */

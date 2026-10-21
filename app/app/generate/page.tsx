@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { stepExperts } from "@/lib/ai/expertise";
 import { STEPS } from "@/lib/ai/schemas";
 import { requireContext } from "@/lib/context";
 import { Generator } from "./Generator";
@@ -14,5 +15,6 @@ export default async function GeneratePage() {
     return <><h1>Génération</h1><div className="card"><p>Validez d'abord la synthèse de votre profil.</p><Link href="/app/profile">Aller au profil</Link></div></>;
   }
   const pending = job ? { id: job.id, status: job.status as string, error: job.error as string | null, completed: STEPS.filter((s) => job.outputs?.[s]) } : null;
-  return <Generator pending={pending} />;
+  const experts = Object.fromEntries(STEPS.map((s) => [s, stepExperts(s)])) as Record<(typeof STEPS)[number], string[]>;
+  return <Generator pending={pending} experts={experts} />;
 }
