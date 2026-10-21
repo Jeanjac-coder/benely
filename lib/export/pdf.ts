@@ -4,7 +4,7 @@ import type { Block, ExportDoc } from "./model.ts";
 
 const FONT = path.join(process.cwd(), "assets/fonts/DejaVuSans.ttf");
 const BOLD = path.join(process.cwd(), "assets/fonts/DejaVuSans-Bold.ttf");
-const ACCENT = "#0f11f4";
+const ACCENT = "#204ecf";
 const MUTED = "#5B6788";
 
 /** Les sections contenant un tableau large passent en paysage. */
@@ -45,6 +45,10 @@ export function renderPdf(d: ExportDoc, opts: { compress?: boolean } = {}): Prom
     doc.page.margins.bottom = 0;
     doc.font("body").fontSize(8).fillColor(MUTED)
       .text(`${d.company} · ${d.title} · Benely · page ${i + 1}/${range.count}`, 50, doc.page.height - 30, { width: doc.page.width - 100, align: "center" });
+    // Filigrane discret, ton sur ton, en bas à droite.
+    doc.font("body").fontSize(44).fillColor(ACCENT).fillOpacity(0.04)
+      .text("B E N E L Y", 0, doc.page.height - 100, { width: doc.page.width - 40, align: "right", lineBreak: false });
+    doc.fillOpacity(1);
     doc.page.margins.bottom = bottom;
   }
   doc.end();
@@ -108,7 +112,7 @@ function table(doc: PDFKit.PDFDocument, columns: string[], rows: string[][]) {
       doc.font(header ? "bold" : "body").fontSize(size);
     }
     const y = doc.y;
-    if (header) doc.rect(x0, y, width, h).fill("#e7e8fe");
+    if (header) doc.rect(x0, y, width, h).fill("#e5ecfc");
     let x = x0;
     cells.forEach((c, i) => {
       doc.fillColor("#0a1238").text(c || "—", x + pad, y + pad, { width: widths[i] - 2 * pad });

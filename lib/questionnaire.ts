@@ -10,7 +10,12 @@ export interface Question {
   options?: string[];
 }
 
-export type Answers = Record<string, string>;
+/** Réponse: texte, choix, multi-sélection ou note. */
+export type AnswerValue = string | string[] | number;
+export type Answers = Record<string, AnswerValue>;
+
+/** Réponse ramenée à un texte (les listes sont jointes par des virgules). */
+export const str = (v: AnswerValue | undefined): string => (Array.isArray(v) ? v.join(", ") : v === undefined || v === null ? "" : String(v)).trim();
 
 const has = (list: string[], ...needles: string[]) =>
   list.some((x) => needles.some((n) => x.toLowerCase().includes(n)));
@@ -64,11 +69,11 @@ export function followUps(p: Profile): Question[] {
 /** Champs utiles absents: affichés à l'utilisateur et transmis à l'IA comme données manquantes. */
 export function missingData(p: Profile, answers: Answers): string[] {
   const missing: string[] = [];
-  if (!p.competitors.trim() && !answers.alternatives?.trim()) missing.push("Concurrents ou alternatives");
+  if (!p.competitors.trim() && !str(answers.alternatives)) missing.push("Concurrents ou alternatives");
   if (p.zones.length === 0) missing.push("Zones commerciales ciblées");
   if (p.salesChannels.length === 0) missing.push("Canaux de vente");
   if (!p.resources.trim()) missing.push("Ressources marketing disponibles");
-  for (const q of followUps(p)) if (!answers[q.id]?.trim()) missing.push(q.label);
+  for (const q of followUps(p)) if (!str(answers[q.id])) missing.push(q.label);
   return missing;
 }
 
@@ -84,7 +89,7 @@ export function buildSummary(p: Profile, answers: Answers): string {
     `Canaux actuels: ${p.channels.join(", ") || "aucun"}. Canaux de vente: ${p.salesChannels.join(", ") || "non précisés"}.`,
     `Concurrents: ${p.competitors || "non identifiés"}. Langues: ${p.languages.join(", ")}.`,
   ];
-  const qa = followUps(p).filter((q) => answers[q.id]?.trim()).map((q) => `- ${q.label} ${answers[q.id].trim()}`);
+  const qa = followUps(p).filter((q) => str(answers[q.id])).map((q) => `- ${q.label} ${str(answers[q.id])}`);
   if (qa.length) lines.push("", "Précisions:", ...qa);
   return lines.join("\n");
 }

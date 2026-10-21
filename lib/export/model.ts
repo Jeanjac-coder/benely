@@ -9,7 +9,7 @@ export type Block =
   | { kind: "list"; items: string[]; label?: string }
   | { kind: "table"; columns: string[]; rows: string[][]; label?: string };
 
-export interface Section { id: Step; title: string; blocks: Block[] }
+export interface Section { id: string; title: string; blocks: Block[] }
 
 export interface Logo { data: Uint8Array; type: "png" | "jpg"; width: number; height: number }
 
