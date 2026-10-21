@@ -124,7 +124,7 @@ export const STEPS = ["diagnostic", "market", "strategy", "branding", "media", "
 export type Step = (typeof STEPS)[number];
 
 export const STEP_LABELS: Record<Step, string> = {
-  diagnostic: "Diagnostic",
+  diagnostic: "Audit marketing",
   market: "Étude de marché et concurrence",
   strategy: "Stratégie et objectifs",
   branding: "Plateforme de marque",

@@ -22,7 +22,7 @@ export default async function Dashboard() {
           <div>
             <h2>{validated ? "Tout est prêt pour votre stratégie !" : "Commençons par faire connaissance."}</h2>
             <p className="muted">{validated
-              ? "Votre profil est validé. Lancez la génération: diagnostic, marché, marque, plan média et calendrier en quelques minutes."
+              ? "Votre profil est validé. Lancez la génération: audit, marché, marque, plan média et calendrier en quelques minutes."
               : "Quelques questions sur votre entreprise, votre marché et votre budget, puis vous validez la synthèse."}</p>
             <ol className="stepper">
               <li data-state={validated ? "done" : "current"}><span>{validated ? "✓" : 1}</span>Profil validé</li>

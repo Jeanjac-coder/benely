@@ -56,7 +56,7 @@ export function ProfileWizard({ initial, initialAnswers, savedSummary, validated
 
   return (
     <>
-      <h1>Profil et diagnostic</h1>
+      <h1>Profil et audit</h1>
       <ol className="stepper" aria-label="Étapes">
         {["Profil de l'entreprise", "Questions complémentaires", "Synthèse à valider"].map((label, i) => (
           <li key={label} data-state={i + 1 === step ? "current" : i + 1 < step ? "done" : "todo"} aria-current={i + 1 === step ? "step" : undefined}>

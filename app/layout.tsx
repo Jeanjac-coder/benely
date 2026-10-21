@@ -4,16 +4,16 @@ import type { ReactNode } from "react";
 import { THEME_SCRIPT } from "@/lib/theme";
 import "./globals.css";
 
-// Sora (SIL Open Font License, voir fonts/Sora-OFL.txt), fichier variable 100–800.
-const sora = localFont({
-  variable: "--font-sora",
+// Geist (Google Fonts, SIL Open Font License, voir fonts/Geist-OFL.txt), fichier variable 100–900 embarqué.
+const geist = localFont({
+  variable: "--font-geist",
   display: "swap",
-  src: [{ path: "./fonts/Sora-Variable.woff2", weight: "100 800", style: "normal" }],
+  src: [{ path: "./fonts/Geist-Variable.woff2", weight: "100 900", style: "normal" }],
 });
 
 export const metadata: Metadata = {
   title: { default: "Benely — Copilote marketing IA pour l'Afrique", template: "%s · Benely" },
-  description: "Diagnostic, stratégie, contenus et budget marketing générés par IA, adaptés aux marchés africains.",
+  description: "Audit, stratégie, contenus et plan média générés par IA pour les entreprises d'Afrique francophone. Essai gratuit 14 jours.",
 };
 
 export const viewport: Viewport = {
@@ -22,7 +22,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="fr" className={sora.variable} suppressHydrationWarning>
+    <html lang="fr" className={geist.variable} suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} /></head>
       <body>{children}</body>
     </html>

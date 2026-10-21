@@ -16,12 +16,12 @@ export function AuthLayout({ title, subtitle, children, welcome = "Bienvenue" }:
         </div>
         <p className="welcome"><span>Akwaba sur Benely</span>{welcome.toUpperCase()}</p>
         <div className="desktop-only">
-          <h2>Votre direction marketing, propulsée par l'IA.</h2>
+          <h2>Votre marketing, enfin clair et maîtrisé.</h2>
           <ul style={{ marginTop: 20 }}>
-            <li>Stratégie complète en six étapes</li>
-            <li>Budgets en FCFA, paiement Mobile Money</li>
-            <li>Calendrier éditorial prêt à publier</li>
-            <li>14 jours d'essai gratuit</li>
+            <li>Audit et stratégie complète en 6 étapes</li>
+            <li>Publications rédigées, prêtes à poster</li>
+            <li>Paiement simple par Mobile Money</li>
+            <li>14 jours d'essai gratuit, sans carte bancaire</li>
           </ul>
         </div>
         <div className="desktop-only"><Socials /></div>

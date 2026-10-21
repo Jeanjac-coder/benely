@@ -8,6 +8,8 @@ Projet **BENELY** (`amvihjwhiqgmtusuxber`, région eu-west-1): migrations `0001`
 
 Migration `0004` (profils: prénom et nom, remplis à l'inscription par formulaire ou Google) appliquée le 21 octobre 2026.
 
+Migration `0005` (offres: Business à 14 900 FCFA, Starter avec 2 collaborateurs) appliquée le 21 octobre 2026.
+
 ## 2. À faire dans le tableau de bord Supabase
 
 1. **Authentication → URL Configuration**

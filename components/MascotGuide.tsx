@@ -4,10 +4,10 @@ import { Mascot, type Pose } from "./Mascot";
 
 const LINES: { pose: Pose; text: string }[] = [
   { pose: "wave", text: "Akwaba ! Moi c'est BEN, votre copilote marketing." },
-  { pose: "point", text: "En 6 étapes, je bâtis toute votre stratégie." },
-  { pose: "think", text: "WhatsApp, TikTok ou radio ? Je calcule le meilleur mix." },
-  { pose: "happy", text: "Budget en FCFA, paiement Mobile Money. On y va ?" },
-  { pose: "surprised", text: "Quoi ? Votre calendrier éditorial est déjà prêt !" },
+  { pose: "point", text: "En 6 étapes, je construis votre stratégie avec vous." },
+  { pose: "think", text: "WhatsApp, Instagram, Facebook ou TikTok ? Je trouve le bon mix." },
+  { pose: "happy", text: "Essai gratuit, sans carte bancaire. On démarre ?" },
+  { pose: "surprised", text: "Déjà ? Vos publications du mois sont prêtes !" },
 ];
 
 /** Mascotte interactive: change de pose et de bulle au clic (et toutes les 6 s). */

@@ -47,7 +47,7 @@ test("T09: PDF complet et lisible (accents, sections, calendrier, pagination)", 
   const file = path.join(dir, "out.pdf");
   writeFileSync(file, buf);
   const text = execFileSync("pdftotext", ["-layout", file, "-"]).toString();
-  for (const s of ["Kôkô Jus Abidjan", "Stratégie marketing et communication", "Diagnostic", "Étude de marché", "Plateforme de marque", "Calendrier éditorial", "bissap", "Wave", "page 2/"]) {
+  for (const s of ["Kôkô Jus Abidjan", "Stratégie marketing et communication", "Audit marketing", "Étude de marché", "Plateforme de marque", "Calendrier éditorial", "bissap", "Wave", "page 2/"]) {
     assert.ok(text.includes(s), `texte manquant dans le PDF: ${s}`);
   }
   const pages = Number(/Pages:\s+(\d+)/.exec(execFileSync("pdfinfo", [file]).toString())![1]);
@@ -67,7 +67,7 @@ test("T09: DOCX complet, à l'unité", async () => {
 test("T09: XLSX avec une feuille par livrable et le calendrier en tableau", async () => {
   const wb = new ExcelJS.Workbook();
   await wb.xlsx.load((await renderXlsx(doc())) as unknown as ExcelJS.Buffer);
-  assert.deepEqual(wb.worksheets.map((w) => w.name), ["Couverture", "Diagnostic", "Étude de marché et concurrence", "Stratégie et objectifs", "Plateforme de marque", "Plan média et campagnes", "Stratégie de contenu et calendr"]);
+  assert.deepEqual(wb.worksheets.map((w) => w.name), ["Couverture", "Audit marketing", "Étude de marché et concurrence", "Stratégie et objectifs", "Plateforme de marque", "Plan média et campagnes", "Stratégie de contenu et calendr"]);
   const cal = wb.worksheets[6];
   const values = cal.getSheetValues().flat().map(String);
   assert.ok(values.includes("2026-11-05") && values.includes("TikTok"));

@@ -11,8 +11,8 @@ const ALT: Record<Pose, string> = {
   think: "BEN réfléchit",
 };
 
-export function Mascot({ pose, height = 160, motion = "float", decorative = true, className = "", style }: {
-  pose: Pose; height?: number; motion?: Motion; decorative?: boolean; className?: string; style?: React.CSSProperties;
+export function Mascot({ pose, height = 160, motion = "float", decorative = true, eager = false, className = "", style }: {
+  pose: Pose; height?: number; motion?: Motion; decorative?: boolean; eager?: boolean; className?: string; style?: React.CSSProperties;
 }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
@@ -22,7 +22,7 @@ export function Mascot({ pose, height = 160, motion = "float", decorative = true
       aria-hidden={decorative || undefined}
       width={Math.round(height * RATIO[pose])}
       height={height}
-      loading="lazy"
+      loading={eager ? "eager" : "lazy"}
       decoding="async"
       draggable={false}
       className={`mascot mascot-${motion} ${className}`}
