@@ -3,8 +3,7 @@
 ## Non publié
 
 ### Interface
-- Logo, symbole et icônes d'onglet recolorés au bleu principal du site (#0077B6).
-- Refonte « ciel »: nouvelle palette orange (#FF5400 → #FF9E00) et bleue (#00B4D8 → #03045E), police Sora. Hero en panneau de ciel avec nuages, BEN assis sur un nuage et cartes flottantes (budget, nouveaux clients, WhatsApp); chiffres clés; bento « Pensé pour l'Afrique »; étapes en cartes blanches sur fond bleu nuit; boutons en pilule avec flèche ronde; tarifs et appel final redessinés. Exports PDF, Word, Excel et factures aux nouvelles couleurs.
+- Refonte « ciel »: nouvelle palette orange (#FF5400 → #FF9E00) et bleue dérivée du bleu du logo #0F11F4 (#5759F8 → #05065E), police Sora. Hero en panneau de ciel avec nuages, BEN assis sur un nuage et cartes flottantes (budget, nouveaux clients, WhatsApp); chiffres clés; bento « Pensé pour l'Afrique »; étapes en cartes blanches sur fond bleu nuit; boutons en pilule avec flèche ronde; tarifs et appel final redessinés. Exports PDF, Word, Excel et factures aux nouvelles couleurs.
 - Nouvelle identité visuelle selon la charte Benely: logo, palette (Electra, Almond, Tangerine, Firecracker, Whisper, Azure), typographie Inter / Inter Display.
 - Page d'accueil refondue: hero Electra avec aperçu du tableau de bord, étapes en cartes colorées, livrables, section Afrique, tarifs lus depuis la base.
 - Application: barre latérale avec icônes et page active, sélecteur d'organisation et offre en cours, onglets en pilule, barre d'étapes du profil, frise de progression de la génération, indicateurs colorés.

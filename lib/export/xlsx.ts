@@ -1,7 +1,7 @@
 import ExcelJS from "exceljs";
 import type { ExportDoc } from "./model.ts";
 
-const HEADER_FILL: ExcelJS.Fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFE3F4FA" } };
+const HEADER_FILL: ExcelJS.Fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFE7E8FE" } };
 const sheetName = (s: string) => s.replace(/[\[\]:*?/\\]/g, " ").slice(0, 31);
 
 export async function renderXlsx(d: ExportDoc): Promise<Buffer> {
@@ -22,7 +22,7 @@ export async function renderXlsx(d: ExportDoc): Promise<Buffer> {
   cover.getCell(row, 1).value = d.company;
   cover.getCell(row, 1).font = { bold: true, size: 18 };
   cover.getCell(row + 1, 1).value = d.title;
-  cover.getCell(row + 1, 1).font = { size: 14, color: { argb: "FF0077B6" } };
+  cover.getCell(row + 1, 1).font = { size: 14, color: { argb: "FF0F11F4" } };
   cover.getCell(row + 2, 1).value = d.subtitle;
   cover.getCell(row + 3, 1).value = `Document généré le ${d.generatedAt}`;
   cover.getCell(row + 5, 1).value = "Les estimations et prévisions ne constituent pas des résultats garantis.";
@@ -38,7 +38,7 @@ export async function renderXlsx(d: ExportDoc): Promise<Buffer> {
       if (style?.font) r.font = style.font;
       return r;
     };
-    add([s.title], { font: { bold: true, size: 14, color: { argb: "FF0077B6" } } });
+    add([s.title], { font: { bold: true, size: 14, color: { argb: "FF0F11F4" } } });
     add([]);
     for (const b of s.blocks) {
       const label = b.kind === "h" ? b.text : b.label;
