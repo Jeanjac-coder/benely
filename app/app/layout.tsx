@@ -37,8 +37,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     <AppShell
       items={items}
       home="/app"
-      head={<OrgSwitcher orgs={ctx.orgs} current={ctx.org.id} compact />}
-      foot={<OrgSwitcher orgs={ctx.orgs} current={ctx.org.id} plan={plan} />}
+      foot={<OrgSwitcher orgs={ctx.orgs} current={ctx.org.id} plan={plan} user={{ name: `${ctx.firstName} ${ctx.lastName}`.trim(), email: ctx.email }} />}
       banner={banner && <div className="banner" role="status">{banner} <Link href="/app/billing">Gérer l'abonnement</Link></div>}
     >
       {children}

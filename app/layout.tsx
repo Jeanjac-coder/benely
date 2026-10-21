@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import { THEME_SCRIPT } from "@/lib/theme";
 import "./globals.css";
 
 const inter = localFont({
@@ -28,11 +29,14 @@ export const metadata: Metadata = {
   description: "Diagnostic, stratégie, contenus et budget marketing générés par IA, adaptés aux marchés africains.",
 };
 
-export const viewport: Viewport = { themeColor: "#1010FF" };
+export const viewport: Viewport = {
+  themeColor: [{ media: "(prefers-color-scheme: light)", color: "#29309B" }, { media: "(prefers-color-scheme: dark)", color: "#070B24" }],
+};
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="fr" className={`${inter.variable} ${interDisplay.variable}`}>
+    <html lang="fr" className={`${inter.variable} ${interDisplay.variable}`} suppressHydrationWarning>
+      <head><script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} /></head>
       <body>{children}</body>
     </html>
   );

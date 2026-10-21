@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Mascot, type Pose } from "./Mascot";
 
 const LINES: { pose: Pose; text: string }[] = [
-  { pose: "wave", text: "Akwaba ! Je suis votre copilote marketing." },
+  { pose: "wave", text: "Akwaba ! Moi c'est BEN, votre copilote marketing." },
   { pose: "point", text: "En 6 étapes, je bâtis toute votre stratégie." },
   { pose: "think", text: "WhatsApp, TikTok ou radio ? Je calcule le meilleur mix." },
   { pose: "happy", text: "Budget en FCFA, paiement Mobile Money. On y va ?" },
@@ -26,7 +26,7 @@ export function MascotGuide({ height = 210 }: { height?: number }) {
       type="button"
       className="guide"
       onClick={() => { setI((x) => (x + 1) % LINES.length); setBump((b) => b + 1); }}
-      aria-label="Parler avec la mascotte"
+      aria-label="Parler avec BEN"
     >
       <span key={`b${i}`} className="bubble" role="status">{line.text}</span>
       <span key={`m${i}-${bump}`} className="guide-body">

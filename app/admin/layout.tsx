@@ -23,7 +23,6 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     <AppShell
       items={ITEMS}
       home="/admin"
-      head={<span className="badge badge-hypothese">Admin</span>}
       foot={<div className="stack small"><span className="badge badge-hypothese" style={{ alignSelf: "flex-start" }}>Administration</span><span className="muted">{admin.email}</span><Link href="/app">← Retour à l'application</Link></div>}
     >
       <div style={{ maxWidth: 1200 }}>

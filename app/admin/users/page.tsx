@@ -2,19 +2,22 @@ import { supabaseAdmin } from "@/lib/supabase/admin";
 
 export default async function Users() {
   const db = supabaseAdmin();
-  const [{ data }, { data: members }, { data: admins }] = await Promise.all([
+  const [{ data }, { data: members }, { data: admins }, { data: profiles }] = await Promise.all([
     db.auth.admin.listUsers({ perPage: 1000 }),
     db.from("memberships").select("user_id, role, organizations(name)"),
     db.from("platform_admins").select("user_id"),
+    db.from("profiles").select("id, first_name, last_name"),
   ]);
+  const nameOf = (id: string) => { const p = profiles?.find((x) => x.id === id); return p ? `${p.first_name} ${p.last_name}`.trim() : ""; };
   const adminIds = new Set((admins ?? []).map((a) => a.user_id));
   return (
     <>
       <h1>Utilisateurs</h1>
       <div className="table-wrap"><table>
-        <thead><tr><th>E-mail</th><th>Vérifié</th><th>Inscription</th><th>Dernière connexion</th><th>Organisations</th></tr></thead>
+        <thead><tr><th>Nom</th><th>E-mail</th><th>Vérifié</th><th>Inscription</th><th>Dernière connexion</th><th>Organisations</th></tr></thead>
         <tbody>{(data?.users ?? []).map((u) => (
           <tr key={u.id}>
+            <td>{nameOf(u.id) || "—"}</td>
             <td>{u.email}{adminIds.has(u.id) && <span className="badge" style={{ marginLeft: 6 }}>admin</span>}</td>
             <td>{u.email_confirmed_at ? "Oui" : "Non"}</td>
             <td>{new Date(u.created_at).toLocaleDateString("fr-FR")}</td>

@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api } from "@/components/client";
+import { CONTACT_EMAIL } from "@/lib/site";
 
 type Props = { planId: string; priced: boolean; renew: boolean; cancel?: never } | { cancel: boolean; planId?: never; priced?: never; renew?: never };
 
@@ -44,7 +45,7 @@ export function BillingActions(props: Props) {
       </>
     );
   }
-  if (!props.priced) return <p className="small"><a href="mailto:contact@benely.africa">Nous contacter</a></p>;
+  if (!props.priced) return <p className="small"><a href={`mailto:${CONTACT_EMAIL}`}>Nous contacter</a></p>;
   return (
     <>
       <button onClick={() => pay(props.planId)} disabled={busy}>{busy ? "Redirection…" : props.renew ? "Renouveler (1 mois)" : "Choisir cette offre"}</button>

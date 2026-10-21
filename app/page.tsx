@@ -5,6 +5,9 @@ import { Logo } from "@/components/Logo";
 import { Mascot, type Pose } from "@/components/Mascot";
 import { MascotGuide } from "@/components/MascotGuide";
 import { Reveal } from "@/components/Reveal";
+import { Socials } from "@/components/Socials";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { CONTACT_EMAIL } from "@/lib/site";
 import { QUOTA_LABELS, type Plan, type QuotaKind } from "@/lib/billing/plans";
 import { formatMoney } from "@/lib/money";
 
@@ -58,8 +61,22 @@ export default async function Landing() {
           <a href="#tarifs">Tarifs</a>
         </nav>
         <div className="actions">
+          <ThemeToggle />
           <Link href="/auth/login" className="btn btn-ghost">Se connecter</Link>
           <Link href="/auth/signup" className="btn btn-dark">Essai gratuit</Link>
+          <details className="mobile-menu">
+            <summary className="icon-btn" aria-label="Menu">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10" /></svg>
+            </summary>
+            <nav className="panel" aria-label="Menu">
+              <a href="#fonctionnement">Fonctionnement</a>
+              <a href="#livrables">Livrables</a>
+              <a href="#afrique">Pensé pour l'Afrique</a>
+              <a href="#tarifs">Tarifs</a>
+              <Link href="/auth/login">Se connecter</Link>
+              <Link href="/auth/signup" className="btn">Commencer l'essai gratuit</Link>
+            </nav>
+          </details>
         </div>
       </header>
 
@@ -73,7 +90,7 @@ export default async function Landing() {
             <span className="w" style={{ "--i": 2 } as React.CSSProperties}>direction</span>{" "}
             <span className="w" style={{ "--i": 3 } as React.CSSProperties}>marketing,</span>{" "}
             <span className="w scribble" style={{ "--i": 4 } as React.CSSProperties}>propulsée
-              <svg viewBox="0 0 300 30" preserveAspectRatio="none"><path d="M4 22 C 70 6, 150 4, 296 14" stroke="#FF5500" strokeWidth="7" fill="none" strokeLinecap="round" /></svg>
+              <svg viewBox="0 0 300 30" preserveAspectRatio="none"><path d="M4 22 C 70 6, 150 4, 296 14" stroke="#FF8D3A" strokeWidth="7" fill="none" strokeLinecap="round" /></svg>
             </span>{" "}
             <span className="w" style={{ "--i": 5 } as React.CSSProperties}>par</span>{" "}
             <span className="w hl" style={{ "--i": 6 } as React.CSSProperties}>l'IA</span><span className="w" style={{ "--i": 7 } as React.CSSProperties}>.</span>
@@ -82,8 +99,9 @@ export default async function Landing() {
         <p className="lead">Benely analyse votre entreprise et votre marché, construit une stratégie complète, puis l'ajuste avec vos résultats. Pour les PME, startups, grandes entreprises et agences.</p>
         <div className="ctas">
           <Link href="/auth/signup" className="btn btn-light btn-lg">Commencer l'essai gratuit <Icon name="arrow" /></Link>
-          <a href="#fonctionnement" className="btn btn-lg" style={{ background: "rgba(255,255,255,.12)", border: "1px solid rgba(255,255,255,.3)" }}>Voir comment ça marche</a>
+          <a href="#fonctionnement" className="btn btn-lg btn-glass">Voir comment ça marche</a>
         </div>
+        <div className="hero-mascot-mobile"><MascotGuide height={130} /></div>
         <div className="trust">
           <span>14 jours gratuits</span><span>Paiement Orange Money · MTN · Moov · Wave</span><span>Budgets en FCFA</span><span>Exports PDF · Word · Excel</span>
         </div>
@@ -99,7 +117,7 @@ export default async function Landing() {
         <div className="floaty f3" aria-hidden="true"><div className="wa"><span className="av">W</span><span>« Je veux commander ! »<small>WhatsApp Business · 09:41</small></span></div></div>
         <div className="floaty f4" aria-hidden="true">★★★★★</div>
         <div className="cursor" aria-hidden="true">
-          <svg width="26" height="26" viewBox="0 0 24 24"><path d="M3 2l18 8-8 2.5L10 21z" fill="#FF5500" stroke="#fff" strokeWidth="1.5" strokeLinejoin="round" /></svg>
+          <svg width="26" height="26" viewBox="0 0 24 24"><path d="M3 2l18 8-8 2.5L10 21z" fill="#F45E23" stroke="#fff" strokeWidth="1.5" strokeLinejoin="round" /></svg>
           <span>Awa · Kôkô Jus</span>
         </div>
         <div className="hero-mascot"><MascotGuide height={200} /></div>
@@ -117,7 +135,7 @@ export default async function Landing() {
                 <defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#1010FF" stopOpacity=".25" /><stop offset="1" stopColor="#1010FF" stopOpacity="0" /></linearGradient></defs>
                 <path d="M0 90 L30 80 L60 84 L90 66 L120 70 L150 52 L180 58 L210 40 L240 46 L270 30 L300 34 L330 20 L360 24 L400 8 L400 110 L0 110Z" fill="url(#g)" />
                 <path className="chart-line" d="M0 90 L30 80 L60 84 L90 66 L120 70 L150 52 L180 58 L210 40 L240 46 L270 30 L300 34 L330 20 L360 24 L400 8" stroke="#1010FF" strokeWidth="2.5" fill="none" />
-                <circle cx="270" cy="30" r="5" fill="#FF5500" />
+                <circle cx="270" cy="30" r="5" fill="#FF8D3A" />
               </svg>
             </div>
             <div className="mock-card">
@@ -185,10 +203,10 @@ export default async function Landing() {
       <section className="section">
         <div className="promo" data-reveal>
           <div className="copy">
-            <span className="badge" style={{ background: "#fff" }}>Votre copilote</span>
-            <h2>Un copilote qui ne vous lâche pas.</h2>
-            <p style={{ margin: "0 0 18px", color: "var(--ink-2)" }}>Il signale les données manquantes, sépare les faits des hypothèses et vous prévient quand une campagne décroche.</p>
-            <Link href="/auth/signup" className="btn btn-dark">Rencontrer votre copilote <Icon name="arrow" /></Link>
+            <span className="badge" style={{ background: "rgba(255,255,255,.7)", color: "var(--on-pastel)" }}>Votre copilote</span>
+            <h2>BEN, un copilote qui ne vous lâche pas.</h2>
+            <p style={{ margin: "0 0 18px", opacity: .8 }}>Il signale les données manquantes, sépare les faits des hypothèses et vous prévient quand une campagne décroche.</p>
+            <Link href="/auth/signup" className="btn btn-dark">Rencontrer BEN <Icon name="arrow" /></Link>
           </div>
           <div className="mascots" aria-hidden="true">
             <Mascot pose="think" height={170} motion="sway" />
@@ -209,14 +227,14 @@ export default async function Landing() {
               {p.id === "business" && <Mascot pose="point" height={100} motion="float" className="perch" />}
               <div className="row" style={{ justifyContent: "space-between" }}>
                 <h3 style={{ margin: 0, fontSize: "1.3rem" }}>{p.name}</h3>
-                {p.id === "business" && <span className="badge" style={{ background: "var(--firecracker)", color: "var(--ink)" }}>Le plus choisi</span>}
+                {p.id === "business" && <span className="badge badge-sun">Le plus choisi</span>}
               </div>
               <p className="muted" style={{ margin: 0 }}>{PLAN_TEXT[p.id] ?? ""}</p>
               <div className="amount">{p.price_monthly ? <>{formatMoney(p.price_monthly, p.currency)} <small>/ mois</small></> : "Sur devis"}</div>
               <ul>{(Object.keys(QUOTA_LABELS) as QuotaKind[]).map((k) => <li key={k}>{QUOTA_LABELS[k]}: {p.quotas[k] ?? "illimité"}</li>)}</ul>
               {p.price_monthly
                 ? <Link href="/auth/signup" className={`btn ${p.id === "business" ? "btn-light" : "btn-dark"}`}>Commencer</Link>
-                : <a href="mailto:contact@benely.africa" className="btn btn-ghost">Nous contacter</a>}
+                : <a href={`mailto:${CONTACT_EMAIL}`} className="btn btn-ghost">Nous contacter</a>}
             </article>
           ))}
         </div>
@@ -229,9 +247,14 @@ export default async function Landing() {
       </section>
 
       <footer className="footer">
-        <Logo variant="white" height={26} />
-        <span>© {new Date().getFullYear()} Benely · Abidjan</span>
-        <span className="row"><Link href="/auth/login" style={{ color: "#fff" }}>Connexion</Link><a href="mailto:contact@benely.africa" style={{ color: "#fff" }}>Contact</a></span>
+        <div className="cols">
+          <Logo variant="white" height={26} href={null} />
+          <Socials />
+        </div>
+        <div className="cols small">
+          <span>© {new Date().getFullYear()} Benely · Abidjan</span>
+          <span className="row"><Link href="/auth/login">Connexion</Link><Link href="/auth/signup">Créer un compte</Link><a href={`mailto:${CONTACT_EMAIL}`}>Contact</a></span>
+        </div>
       </footer>
       <Reveal />
     </div>

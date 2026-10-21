@@ -10,6 +10,12 @@
 - Exports PDF, Word, Excel et factures aux couleurs de la charte.
 - Icône d'onglet et icône Apple à partir du symbole « B ».
 - Mascotte (5 poses) intégrée: guide interactif dans le hero (change de pose et de bulle au clic), apparitions dans les cartes, la bande promotionnelle, les tarifs, l'appel à l'action, la connexion, le tableau de bord vide et la génération (réfléchit pendant le calcul, surprise en cas d'erreur).
+- Nouvelle palette (Cobalt Blue, Night Sky, Periwinkle, Pastel Blue, Turquoise, Pastel Peach, Clementine, Nectar, Yellow Dahlia…), glassmorphisme (navigation, cartes, menus, cartes flottantes) et mode sombre (selon le système ou au choix, mémorisé).
+- Mobile: navigation d'accueil avec menu déroulant, BEN dans le hero, application avec barre supérieure et menu, mises en page resserrées.
+- Connexion: « BIENVENUE », BEN qui salue, carte de formulaire en verre, connexion avec Google; prénom et nom demandés à l'inscription (table `profiles`), modifiables dans Paramètres, affichés dans l'application et l'équipe.
+- Écran de chargement animé avec BEN et indicateurs de chargement dans les boutons.
+- Liens vers Facebook, Instagram et TikTok (pied de page, connexion).
+- La mascotte s'appelle BEN.
 - Animations: titre révélé mot par mot, trait dessiné, cartes flottantes et curseur autour de l'aperçu, graphiques qui se tracent, bandeau défilant des canaux, apparitions au défilement, survols animés. Toutes désactivées avec « réduire les animations ».
 
 ## 1.0.0 — 21 octobre 2026

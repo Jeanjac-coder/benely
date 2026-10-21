@@ -16,7 +16,7 @@ export default async function Dashboard() {
     const validated = Boolean(profile?.validated_at);
     return (
       <>
-        <h1>Bienvenue, {ctx.org.name}</h1>
+        <h1>Bienvenue{ctx.firstName ? `, ${ctx.firstName}` : ""} !</h1>
         <div className="card empty">
           <Mascot pose={validated ? "point" : "wave"} height={170} motion="float" />
           <div>
@@ -44,6 +44,7 @@ export default async function Dashboard() {
 
   return (
     <>
+      <p className="muted" style={{ margin: 0, fontWeight: 600 }}>Bonjour{ctx.firstName ? ` ${ctx.firstName}` : ""} 👋</p>
       <h1>{current.strategy.title}</h1>
       <p className="muted small">Version {current.version.version} · période du {d.meta.period.start} au {d.meta.period.end}</p>
       <div className="kpis">
