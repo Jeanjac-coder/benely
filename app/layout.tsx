@@ -17,14 +17,18 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [{ media: "(prefers-color-scheme: light)", color: "#0F11F4" }, { media: "(prefers-color-scheme: dark)", color: "#02031F" }],
+  themeColor: [{ media: "(prefers-color-scheme: light)", color: "#204ECF" }, { media: "(prefers-color-scheme: dark)", color: "#050B20" }],
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fr" className={geist.variable} suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} /></head>
-      <body>{children}</body>
+      <body>
+        {children}
+        {/* Filigrane discret, ton sur ton, sur toutes les pages. */}
+        <div className="watermark" aria-hidden="true">BENELY</div>
+      </body>
     </html>
   );
 }

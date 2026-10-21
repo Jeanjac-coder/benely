@@ -4,7 +4,7 @@ import {
 } from "docx";
 import type { Block, ExportDoc } from "./model.ts";
 
-const ACCENT = "0F11F4";
+const ACCENT = "204ECF";
 const wide = (blocks: Block[]) => blocks.some((b) => b.kind === "table" && b.columns.length >= 6);
 const lines = (text: string, bold = false) => text.split("\n").map((t, i) => new TextRun({ text: t, bold, break: i > 0 ? 1 : 0 }));
 
@@ -16,7 +16,7 @@ function blockToDocx(b: Block): (Paragraph | Table)[] {
   const border = { style: BorderStyle.SINGLE, size: 2, color: "D9D8D0" };
   const cell = (text: string, header: boolean) => new TableCell({
     children: [new Paragraph({ children: lines(text || "—", header) })],
-    shading: header ? { type: ShadingType.CLEAR, color: "auto", fill: "E7E8FE" } : undefined,
+    shading: header ? { type: ShadingType.CLEAR, color: "auto", fill: "E5ECFC" } : undefined,
     borders: { top: border, bottom: border, left: border, right: border },
     margins: { top: 40, bottom: 40, left: 60, right: 60 },
   });

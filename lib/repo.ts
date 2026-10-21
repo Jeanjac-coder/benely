@@ -1,4 +1,5 @@
 import type { Deliverables } from "./ai/schemas";
+import { upgradeDeliverables } from "./ai/upgrade";
 import type { Issue } from "./ai/coherence";
 import type { OrgContext } from "./context";
 
@@ -20,7 +21,8 @@ export async function latestStrategy(ctx: OrgContext) {
   const { data: version } = await ctx.supabase
     .from("strategy_versions").select("id, version, deliverables, issues, source, note, created_at")
     .eq("strategy_id", strategy.id).eq("version", strategy.current_version).maybeSingle();
-  return version ? { strategy, version: version as StrategyVersion } : null;
+  // Les versions antérieures à la méthodologie sont complétées pour rester lisibles et modifiables.
+  return version ? { strategy, version: { ...version, deliverables: upgradeDeliverables(version.deliverables) } as StrategyVersion } : null;
 }
 
 /**

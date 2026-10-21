@@ -1,5 +1,5 @@
 "use client";
-import { ENUMS, label, NATURE_LABEL } from "./labels";
+import { ENUMS, label, OPTION_LABELS } from "./labels";
 
 type V = unknown;
 const isObj = (v: V): v is Record<string, V> => typeof v === "object" && v !== null && !Array.isArray(v);
@@ -20,7 +20,7 @@ export function ValueEditor({ value, onChange, name, path = "" }: { value: V; on
     if (name && ENUMS[name]) {
       return (
         <select id={id} value={value} onChange={(e) => onChange(e.target.value)}>
-          {ENUMS[name].map((o) => <option key={o} value={o}>{NATURE_LABEL[o] ?? o}</option>)}
+          {ENUMS[name].map((o) => <option key={o} value={o}>{OPTION_LABELS[o] ?? o}</option>)}
         </select>
       );
     }

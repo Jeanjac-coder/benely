@@ -38,6 +38,6 @@ export function assemble(input: JobInput, outputs: JobOutputs): Deliverables {
   const { _sources, ...steps } = outputs;
   return {
     ...(steps as StepOutputs),
-    meta: { monthlyBudget: input.profile.monthlyBudget, currency: input.profile.currency, period: input.period, sources: _sources ?? [] },
+    meta: { monthlyBudget: input.profile.monthlyBudget, currency: input.profile.currency, period: input.period, sources: _sources ?? [], methodologyVersion: input.methodology?.version ?? null },
   };
 }

@@ -14,3 +14,4 @@ check() {
 check rls_test.sql "RLS: tous les contrôles passent"
 check billing_test.sql "Facturation: tous les contrôles passent"
 check profiles_test.sql "Profils: tous les contrôles passent"
+check diagnostic_test.sql "Diagnostic: tous les contrôles passent"

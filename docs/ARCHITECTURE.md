@@ -102,3 +102,14 @@ Pour élever la qualité des livrables, chaque étape de génération reçoit, a
 - `scripts/sync-agents.mjs` condense les fiches retenues (identité, missions, règles, cadres, critères de réussite; sans outillage ni gabarits de code) dans `lib/ai/agents.generated.ts`. Mise à jour: cloner le dépôt puis `npm run agents:sync <chemin>`.
 - `lib/ai/expertise.ts` associe les experts aux étapes (`STEP_AGENTS`) et construit le bloc injecté. Il demande d'adapter ces méthodes au marché local et rappelle que les principes de Benely et le format de sortie priment.
 - Coût: environ 2 500 à 4 500 jetons d'entrée supplémentaires par étape, suivis comme le reste dans `ai_usage`.
+
+## Méthodologie Benely (référence principale)
+
+Le document « Stratégie marketing : processus détaillé étape par étape » est stocké dans la table `methodology_documents` (migration `0006`, versionnée, une seule version active). Il est la référence principale de toutes les générations:
+
+- **Chargement**: `activeMethodology()` (`lib/jobs.ts`) lit la version active avec le rôle service (la table est réservée aux super-administrateurs) et la copie dans l'entrée du job: toutes les étapes d'une génération utilisent la même version. Sa version est enregistrée dans `meta.methodologyVersion` de chaque stratégie.
+- **Injection**: le document est ajouté au contexte mis en cache (`buildContext`, `lib/ai/prompts.ts`); le prompt système impose qu'il prime sur toute autre méthode, fiches d'experts comprises. Chaque consigne d'étape renvoie aux étapes de la méthodologie qu'elle applique.
+- **Audit systématique**: l'étape « Audit marketing » produit l'audit interne, la PESTEL (6 facteurs), 3 à 5 enjeux hiérarchisés et une grille d'audit à 10 lignes (une par étape de la méthodologie: statut, constat, recommandation).
+- **Contrôle de conformité**: `checkMethodology` (`lib/ai/coherence.ts`) signale une étape d'audit manquante (erreur), une PESTEL incomplète, un nombre d'enjeux, de personas ou de piliers hors des bornes, des objectifs absents d'étapes du parcours RACE, l'absence d'insight ou de check-list de tracking.
+- **Stratégies antérieures**: `upgradeDeliverables` (`lib/ai/upgrade.ts`) complète les nouveaux champs à vide pour qu'elles restent lisibles, modifiables et exportables.
+- **Administration**: `/admin/methodology` affiche la version active, publie une nouvelle version (Markdown) ou réactive une version antérieure (action journalisée).

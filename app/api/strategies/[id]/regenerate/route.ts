@@ -40,7 +40,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
   try {
     const r = await runStep(step, input, { ...others, _sources: meta.sources });
     await recordUsage(ctx, null, `regenerate:${step}`, r.usage);
-    const next: Deliverables = { ...d, [step]: r.outputs[step], meta: { ...meta, period, sources: r.outputs._sources ?? meta.sources } };
+    const next: Deliverables = { ...d, [step]: r.outputs[step], meta: { ...meta, period, sources: r.outputs._sources ?? meta.sources, methodologyVersion: input.methodology?.version ?? meta.methodologyVersion ?? null } };
     const version = await saveVersion(ctx, params.id, next, checkCoherence(next), "regeneration", `Régénération: ${step}`);
     await recordQuotaUse(ctx, "regenerations");
     return NextResponse.json({ version });

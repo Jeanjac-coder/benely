@@ -2,6 +2,19 @@
 
 ## Non publié
 
+### Diagnostic stratégique
+- Questionnaire refondu en parcours conversationnel guidé par BEN: 11 sections (entreprise, diagnostic marketing, diagnostic digital, identité de marque, concurrence, parcours client, communication actuelle, innovation et IA, objectifs business, budget et ressources en fourchettes FCFA, accompagnement souhaité) plus une section de précisions adaptative. Champs guidés (cartes illustrées, puces, segments, échelles de 1 à 5, listes), barre de progression, navigation collante sur mobile, sauvegarde automatique, préremplissage depuis l'ancien profil.
+- Score de maturité marketing sur 100 (7 dimensions pondérées et documentées dans `lib/maturity.ts`), forces, axes de progrès et recommandations.
+- 3 actions prioritaires générées par l'IA à partir des réponses, du score et de la méthodologie Benely (recommandations standard si l'IA est indisponible), avec opportunités et priorités à 30 jours.
+- Benchmark sectoriel anonymisé (fonction `sector_benchmark`: agrégats publiés à partir de 5 entreprises comparables, hors entreprise appelante).
+- Rapport PDF personnalisé (synthèse, opportunités, plan d'action, priorités, réponses).
+- Demande d'échange stratégique de 30 minutes (table `consultation_requests`), suivi dans l'administration (« Rendez-vous »); lien d'agenda optionnel `NEXT_PUBLIC_BOOKING_URL`.
+- Migration `0007_diagnostic.sql` et tests SQL associés.
+
+### Identité
+- Palette rafraîchie: crab #F26749, sand dollar #FCDED6, vista blue #83A5F2, deep ocean #204ECF, butterscotch #EA9836 (site, application et exports). Le logo conserve son bleu #0F11F4.
+- Filigrane « BENELY » discret (4 %, typographie fine, ton sur ton) en bas à droite de toutes les pages et des PDF.
+
 ### Interface
 - Textes du site réécrits pour la conversion, sur un ton rassurant: nouvelle accroche, navigation (« Comment ça marche », « Pourquoi Benely », « Ce que vous recevez », « Tarifs », « Connexion », « Essai gratuit »), preuves de réassurance (14 jours gratuits, sans carte bancaire, sans engagement), étapes, offres et appels à l'action. « Diagnostic » devient « Audit » dans tout le site, l'application et les exports. Radio retirée des textes au profit d'Instagram et Facebook.
 - Drapeaux des 7 pays couverts (SVG) dans les chiffres clés, le bento et le pied de page.
@@ -32,6 +45,7 @@ Première version de Benely, copilote IA de stratégie marketing et communicatio
 - Authentification côté serveur avec `@supabase/server`: le jeton de session (cookie géré par `@supabase/ssr`) est vérifié localement avec les clés publiques du projet, sans appel à Supabase Auth à chaque requête; repli automatique sur `auth.getUser()` si la vérification locale est impossible. Le client « service » est créé par `createAdminClient`.
 
 ### Fonctionnalités
+- Méthodologie Benely: le document « Stratégie marketing : processus détaillé étape par étape » est stocké en base (versionné) et sert de référence principale à toutes les générations. Audit systématique pour chaque utilisateur: audit interne, PESTEL, enjeux hiérarchisés et grille d'audit en 10 étapes (statut, constat, recommandation). Livrables enrichis (étape du parcours RACE par objectif, déclencheur et citation des personas, insights, positionnement formulé, big idea, canaux owned/earned/paid, logique budgétaire, check-list de tracking), contrôle de conformité automatique, version de méthodologie affichée sur chaque stratégie, page d'administration pour publier une nouvelle version.
 - Offres: Business à 14 900 FCFA par mois avec support 24h/24 et avantages mis en avant; Starter avec 2 collaborateurs; Enterprise avec support 24h/24, interlocuteur dédié, multi-marques, formation et facturation sur mesure (migration `0005`, appliquée sur le projet BENELY).
 - Experts IA: chaque étape de génération mobilise des fiches d'experts issues d'agency-agents (licence MIT) — Growth Hacker, Research Synthesist, Trend Researcher, Brand Guardian, Visual Storyteller, Paid Social Strategist, Ad Creative Strategist, TikTok Strategist, Content Creator, Instagram Curator… — injectées comme méthode de travail et adaptées au contexte africain. Les experts mobilisés s'affichent pendant la génération. Mise à jour: `npm run agents:sync <dépôt cloné>`.
 - **Comptes et organisations:** inscription avec vérification e-mail, connexion, mot de passe oublié, organisations multiples (agences), rôles propriétaire / administrateur / collaborateur, invitations par lien. Données strictement isolées entre organisations.
