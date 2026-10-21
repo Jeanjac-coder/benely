@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api } from "@/components/client";
 import { STEP_LABELS, STEPS, type Step } from "@/lib/ai/schemas";
+import { Mascot } from "@/components/Mascot";
 import { PeriodPicker } from "@/components/PeriodPicker";
 import { presetPeriod, today } from "@/lib/calendar";
 
@@ -55,6 +56,7 @@ export function Generator({ pending }: { pending: Pending }) {
       <h1>Génération de la stratégie</h1>
       {!jobId && (
         <div className="card">
+          <Mascot pose="point" height={120} motion="sway" style={{ float: "right", marginLeft: 12 }} />
           <p>La génération enchaîne six étapes et prend généralement quelques minutes. Vous pouvez quitter la page: la progression est conservée.</p>
           <PeriodPicker value={period} onChange={setPeriod} />
           <button onClick={start} disabled={running} style={{ marginTop: 14 }}>Lancer la génération</button>
@@ -62,6 +64,12 @@ export function Generator({ pending }: { pending: Pending }) {
       )}
       {jobId && (
         <div className="card" aria-live="polite">
+          <div className="row" style={{ alignItems: "flex-end", marginBottom: 14 }}>
+            <Mascot pose={error ? "surprised" : running ? "think" : "happy"} height={110} motion={running ? "sway" : "float"} />
+            <p className="grow" style={{ margin: 0, fontWeight: 600 }}>
+              {error ? "Oups, une étape a échoué. Rien n'est perdu: relancez-la." : running ? "Je travaille sur votre stratégie… vous pouvez quitter la page." : "Génération en pause: reprenez quand vous voulez."}
+            </p>
+          </div>
           <ol className="progress">
             {STEPS.map((s, i) => {
               const state = done.includes(s) ? "done" : s === current && running ? "current" : "todo";

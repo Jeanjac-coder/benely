@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Mascot } from "@/components/Mascot";
 import { today } from "@/lib/calendar";
 import { requireContext } from "@/lib/context";
 import { formatMoney } from "@/lib/money";
@@ -12,14 +13,23 @@ export default async function Dashboard() {
   ]);
 
   if (!current) {
+    const validated = Boolean(profile?.validated_at);
     return (
       <>
         <h1>Bienvenue, {ctx.org.name}</h1>
-        <div className="card">
-          <ol>
-            <li>{profile?.validated_at ? "✓ Profil validé" : <Link href="/app/profile">Compléter et valider votre profil</Link>}</li>
-            <li>{profile?.validated_at ? <Link href="/app/generate">Générer votre stratégie</Link> : "Générer votre stratégie"}</li>
-          </ol>
+        <div className="card empty">
+          <Mascot pose={validated ? "point" : "wave"} height={170} motion="float" />
+          <div>
+            <h2>{validated ? "Tout est prêt pour votre stratégie !" : "Commençons par faire connaissance."}</h2>
+            <p className="muted">{validated
+              ? "Votre profil est validé. Lancez la génération: diagnostic, marché, marque, plan média et calendrier en quelques minutes."
+              : "Quelques questions sur votre entreprise, votre marché et votre budget, puis vous validez la synthèse."}</p>
+            <ol className="stepper">
+              <li data-state={validated ? "done" : "current"}><span>{validated ? "✓" : 1}</span>Profil validé</li>
+              <li data-state={validated ? "current" : "todo"}><span>2</span>Stratégie générée</li>
+            </ol>
+            <Link href={validated ? "/app/generate" : "/app/profile"} className="btn">{validated ? "Générer ma stratégie" : "Compléter mon profil"}</Link>
+          </div>
         </div>
       </>
     );

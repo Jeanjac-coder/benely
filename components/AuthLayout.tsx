@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Logo } from "./Logo";
+import { Mascot } from "./Mascot";
 
 /** Mise en page des pages d'accès: panneau de marque Electra et formulaire. */
 export function AuthLayout({ title, subtitle, children }: { title: string; subtitle?: string; children: ReactNode }) {
@@ -17,7 +18,8 @@ export function AuthLayout({ title, subtitle, children }: { title: string; subti
             <li>14 jours d'essai gratuit</li>
           </ul>
         </div>
-        <p className="mobile-hide small" style={{ color: "#c9cbff", margin: 0 }}>Côte d'Ivoire · Sénégal · Cameroun · Burkina Faso · Mali · Bénin · Togo</p>
+        <p className="mobile-hide small" style={{ color: "#c9cbff", margin: 0, maxWidth: "60%" }}>Côte d'Ivoire · Sénégal · Cameroun · Burkina Faso · Mali · Bénin · Togo</p>
+        <Mascot pose="wave" height={190} motion="float" className="auth-mascot" />
       </section>
       <section className="auth-form">
         <div>

@@ -9,6 +9,8 @@
 - Pages d'accès (connexion, inscription, organisation, invitation) en deux colonnes avec panneau de marque.
 - Exports PDF, Word, Excel et factures aux couleurs de la charte.
 - Icône d'onglet et icône Apple à partir du symbole « B ».
+- Mascotte (5 poses) intégrée: guide interactif dans le hero (change de pose et de bulle au clic), apparitions dans les cartes, la bande promotionnelle, les tarifs, l'appel à l'action, la connexion, le tableau de bord vide et la génération (réfléchit pendant le calcul, surprise en cas d'erreur).
+- Animations: titre révélé mot par mot, trait dessiné, cartes flottantes et curseur autour de l'aperçu, graphiques qui se tracent, bandeau défilant des canaux, apparitions au défilement, survols animés. Toutes désactivées avec « réduire les animations ».
 
 ## 1.0.0 — 21 octobre 2026
 
