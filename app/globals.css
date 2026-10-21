@@ -882,3 +882,8 @@ tbody tr:hover td { background: var(--primary-50); }
 .footer-ben.is-landed { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .footer-ben { opacity: 1; transform: none; } }
 @media (max-width: 600px) { .footer-ben { right: 12px; top: -64px; } .footer-ben img { height: 76px; width: auto; } }
+/* Statuts de la grille d'audit méthodologique */
+.badge.audit-conforme { background: #dff6e9; color: #146c3c; }
+.badge.audit-partiel { background: var(--orange-pale); color: #b04a00; }
+.badge.audit-absent { background: #ffe4e4; color: #b42318; }
+.badge.audit-inconnu { background: var(--soft); color: var(--muted); }

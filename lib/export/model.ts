@@ -1,3 +1,4 @@
+import { AUDIT_STATUS_LABELS, CHANNEL_CATEGORY_LABELS, FUNNEL_LABELS, METHODOLOGY_STEP_LABELS, PESTEL_LABELS } from "../methodology.ts";
 import type { Claim, Deliverables, Step } from "../ai/schemas.ts";
 import { STEP_LABELS, STEPS } from "../ai/schemas.ts";
 import { formatMoney } from "../money.ts";
@@ -36,7 +37,13 @@ function sectionBlocks(step: Step, d: Deliverables): Block[] {
         { kind: "p", label: "Maturité marketing", text: { debutant: "Débutant", intermediaire: "Intermédiaire", avance: "Avancé" }[x.maturity] },
         { kind: "list", label: "Forces", items: x.strengths },
         { kind: "list", label: "Faiblesses", items: x.weaknesses },
-        { kind: "list", label: "Enjeux clés", items: x.keyChallenges },
+        { kind: "p", label: "Audit interne — Offre", text: x.internalAudit?.offer ?? "" },
+        { kind: "p", label: "Audit interne — Ressources", text: x.internalAudit?.resources ?? "" },
+        { kind: "p", label: "Audit interne — Performance historique", text: x.internalAudit?.performance ?? "" },
+        { kind: "p", label: "Audit interne — Identité de marque", text: x.internalAudit?.brandIdentity ?? "" },
+        { kind: "table", label: "Analyse PESTEL", columns: ["Facteur", "Constat", "Impact"], rows: (x.pestel ?? []).map((p) => [PESTEL_LABELS[p.factor] ?? p.factor, p.finding, p.impact]) },
+        { kind: "list", label: "Enjeux prioritaires (hiérarchisés)", items: x.keyChallenges },
+        { kind: "table", label: "Grille d'audit — méthodologie Benely", columns: ["Étape", "Statut", "Constat", "Recommandation"], rows: (x.methodologyAudit ?? []).map((a) => [METHODOLOGY_STEP_LABELS[a.step] ?? a.step, AUDIT_STATUS_LABELS[a.status] ?? a.status, a.finding, a.recommendation]) },
         { kind: "list", label: "Données manquantes", items: x.missingData },
         { kind: "list", label: "Hypothèses retenues", items: x.assumptions },
       ];
@@ -57,7 +64,7 @@ function sectionBlocks(step: Step, d: Deliverables): Block[] {
     case "strategy": {
       const x = d.strategy;
       return [
-        { kind: "table", label: "Objectifs SMART", columns: ["Objectif", "Indicateur", "Cible", "Échéance", "Justification"], rows: x.smartObjectives.map((o) => [o.objective, o.metric, `${o.target.toLocaleString("fr-FR")} ${o.unit}`, o.deadline, o.rationale]) },
+        { kind: "table", label: "Objectifs SMART", columns: ["Objectif", "Étape du parcours", "Indicateur", "Cible", "Échéance", "Justification"], rows: x.smartObjectives.map((o) => [o.objective, FUNNEL_LABELS[o.funnelStage] ?? "—", o.metric, `${o.target.toLocaleString("fr-FR")} ${o.unit}`, o.deadline, o.rationale]) },
         { kind: "table", label: "Segmentation", columns: ["Segment", "Description", "Priorité"], rows: x.segments.map((s) => [s.name, s.description, s.priority]) },
         ...x.personas.flatMap((p): Block[] => [
           { kind: "h", text: `Persona — ${p.name} (${p.age}, ${p.occupation})` },
@@ -65,7 +72,10 @@ function sectionBlocks(step: Step, d: Deliverables): Block[] {
           { kind: "list", label: "Besoins", items: p.needs },
           { kind: "list", label: "Freins", items: p.frictions },
           { kind: "p", label: "Canaux et langues", text: `${p.channels.join(", ")} — ${p.languages.join(", ")}` },
+          { kind: "p", label: "Déclencheur d'achat", text: p.trigger ?? "" },
+          { kind: "p", label: "Citation type", text: p.quote ? `« ${p.quote} »` : "" },
         ]),
+        { kind: "list", label: "Insights consommateurs", items: x.insights ?? [] },
         { kind: "p", label: "Positionnement", text: x.positioning },
         { kind: "p", label: "Stratégie marketing", text: x.marketingStrategy },
         { kind: "p", label: "Stratégie digitale", text: x.digitalStrategy },
@@ -76,6 +86,8 @@ function sectionBlocks(step: Step, d: Deliverables): Block[] {
     case "branding": {
       const x = d.branding;
       return [
+        { kind: "p", label: "Positionnement", text: x.positioningStatement ?? "" },
+        { kind: "p", label: "Big idea", text: x.bigIdea ?? "" },
         { kind: "p", label: "Promesse", text: x.promise },
         { kind: "p", label: "Mission", text: x.mission },
         { kind: "p", label: "Vision", text: x.vision },
@@ -91,12 +103,14 @@ function sectionBlocks(step: Step, d: Deliverables): Block[] {
     case "media": {
       const x = d.media;
       return [
-        { kind: "table", label: `Répartition du budget mensuel (${money(d.meta.monthlyBudget)})`, columns: ["Canal", "Part", "Montant mensuel", "Rôle", "KPI", "Objectif mensuel"],
-          rows: x.channels.map((c) => [c.channel, pct(c.budgetShare), money(Math.round(c.budgetShare * d.meta.monthlyBudget)), c.role, c.kpi, c.monthlyTarget.toLocaleString("fr-FR")]) },
+        { kind: "table", label: `Répartition du budget mensuel (${money(d.meta.monthlyBudget)})`, columns: ["Canal", "Type", "Part", "Montant mensuel", "Rôle", "KPI", "Objectif mensuel"],
+          rows: x.channels.map((c) => [c.channel, CHANNEL_CATEGORY_LABELS[c.category] ?? "—", pct(c.budgetShare), money(Math.round(c.budgetShare * d.meta.monthlyBudget)), c.role, c.kpi, c.monthlyTarget.toLocaleString("fr-FR")]) },
         { kind: "table", label: "Campagnes", columns: ["Campagne", "Objectif", "Cible", "Canaux", "Message", "Début", "Durée", "Budget", "KPI estimés"],
           rows: x.campaigns.map((c) => [c.name, c.objective, c.target, c.channels.join(", "), c.message, c.startDate, `${c.durationDays} j`, money(c.budget), c.kpis.map((k) => `${k.name}: ${k.estimate.toLocaleString("fr-FR")} ${k.unit}`).join("\n")]) },
         { kind: "table", label: "Créations recommandées", columns: ["Campagne", "Créations"], rows: x.campaigns.map((c) => [c.name, c.creatives.join("\n")]) },
         { kind: "table", label: "Tunnel de conversion", columns: ["Étape", "Actions", "KPI"], rows: x.funnel.map((f) => [f.stage, f.actions.join("\n"), f.kpi]) },
+        { kind: "p", label: "Logique budgétaire", text: x.budgetLogic ?? "" },
+        { kind: "list", label: "Check-list de tracking avant lancement", items: x.trackingChecklist ?? [] },
         { kind: "p", label: "Avertissement", text: x.forecastDisclaimer },
       ];
     }

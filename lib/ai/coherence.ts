@@ -1,5 +1,6 @@
 import { inPeriod, parseDay, periodDays } from "../calendar.ts";
 import type { Deliverables, Step } from "./schemas.ts";
+import { CHANNEL_CATEGORIES, FUNNEL_STAGES, METHODOLOGY_STEP_LABELS, METHODOLOGY_STEPS, PESTEL_FACTORS } from "../methodology.ts";
 
 export interface Issue {
   severity: "info" | "warning" | "error";
@@ -54,5 +55,41 @@ export function checkCoherence(d: Deliverables): Issue[] {
   if (offPlan.length) issues.push({ severity: "warning", section: "content", message: `Plateformes du calendrier absentes du plan média: ${offPlan.join(", ")}.` });
   if (content.entries.length === 0) issues.push({ severity: "error", section: "content", message: "Calendrier éditorial vide." });
 
+  issues.push(...checkMethodology(d));
+
+  return issues;
+}
+
+/** Conformité à la méthodologie Benely (grille d'audit en 10 étapes, PESTEL, RACE, personas, owned/earned/paid…). */
+export function checkMethodology(d: Deliverables): Issue[] {
+  const issues: Issue[] = [];
+  const { diagnostic, strategy, media, content } = d;
+  const audit = diagnostic.methodologyAudit ?? [];
+  if (audit.length === 0) {
+    issues.push({ severity: "warning", section: "diagnostic", message: "Grille d'audit méthodologique absente (stratégie antérieure à la méthodologie): régénérez l'audit." });
+  } else {
+    const missing = METHODOLOGY_STEPS.filter((s) => !audit.some((a) => a.step === s));
+    if (missing.length) issues.push({ severity: "error", section: "diagnostic", message: `Audit incomplet: étapes de la méthodologie non évaluées: ${missing.map((s) => METHODOLOGY_STEP_LABELS[s]).join(", ")}.` });
+  }
+  const pestel = diagnostic.pestel ?? [];
+  const missingPestel = PESTEL_FACTORS.filter((f) => !pestel.some((p) => p.factor === f));
+  if (missingPestel.length) issues.push({ severity: "warning", section: "diagnostic", message: `Analyse PESTEL incomplète: ${missingPestel.join(", ")}.` });
+  const n = diagnostic.keyChallenges.length;
+  if (n < 3 || n > 5) issues.push({ severity: "warning", section: "diagnostic", message: `La méthodologie prévoit 3 à 5 enjeux prioritaires (${n} actuellement).` });
+
+  const stages = new Set(strategy.smartObjectives.map((o) => o.funnelStage).filter((x) => x && x !== "non_precise"));
+  const uncovered = FUNNEL_STAGES.filter((x) => x !== "non_precise" && !stages.has(x));
+  if (stages.size > 0 && uncovered.length) issues.push({ severity: "warning", section: "strategy", message: `Objectifs absents sur certaines étapes du parcours client (RACE): ${uncovered.join(", ")}.` });
+  const p = strategy.personas.length;
+  if (p > 4 || p === 1) issues.push({ severity: "warning", section: "strategy", message: `La méthodologie recommande 2 à 4 personas (${p} actuellement).` });
+  if ((strategy.insights ?? []).length === 0) issues.push({ severity: "warning", section: "strategy", message: "Aucun insight consommateur formulé." });
+
+  const cats = new Set(media.channels.map((c) => c.category).filter((x) => x && x !== "non_precise"));
+  const missingCats = CHANNEL_CATEGORIES.filter((x) => x !== "non_precise" && !cats.has(x));
+  if (cats.size > 0 && missingCats.length) issues.push({ severity: "info", section: "media", message: `Le mix ne combine pas owned, earned et paid (manque: ${missingCats.join(", ")}).` });
+  if ((media.trackingChecklist ?? []).length === 0) issues.push({ severity: "warning", section: "media", message: "Check-list de tracking absente: le suivi doit être installé avant le lancement." });
+
+  const pillars = content.pillars.length;
+  if (pillars < 3 || pillars > 5) issues.push({ severity: "warning", section: "content", message: `La méthodologie prévoit 3 à 5 piliers éditoriaux (${pillars} actuellement).` });
   return issues;
 }

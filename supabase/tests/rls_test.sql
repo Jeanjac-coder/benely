@@ -54,6 +54,17 @@ insert into invitations (org_id, email, role, invited_by) values (:'org_a', 'x@x
 update memberships set role = 'admin' where user_id = auth.uid();
 \set ON_ERROR_STOP on
 
+-- Méthodologie: un client connecté ne peut ni la lire ni la modifier (réservée à l'administration).
+do $$ begin
+  if exists (select 1 from methodology_documents) then raise exception 'méthodologie lisible par un client'; end if;
+  update methodology_documents set title = 'piraté';
+  begin
+    insert into methodology_documents (version, title, content) values (99, 'faux', 'x');
+    raise exception 'méthodologie modifiable par un client';
+  exception when insufficient_privilege then null;
+  end;
+end $$;
+
 reset role;
 do $$ begin
   if exists (select 1 from strategies where title = 'intrusion') then raise exception 'écriture inter-org acceptée'; end if;
@@ -68,5 +79,7 @@ do $$ begin
      or has_function_privilege('anon', 'public.is_member(uuid)', 'execute') then
     raise exception 'fonction privilégiée appelable sans connexion';
   end if;
+  if exists (select 1 from methodology_documents where title = 'piraté' or version = 99) then raise exception 'méthodologie modifiée par un client'; end if;
+  if not exists (select 1 from methodology_documents where active) then raise exception 'méthodologie active absente'; end if;
   raise notice 'RLS: tous les contrôles passent';
 end $$;

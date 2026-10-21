@@ -10,6 +10,8 @@ Migration `0004` (profils: prénom et nom, remplis à l'inscription par formulai
 
 Migration `0005` (offres: Business à 14 900 FCFA, Starter avec 2 collaborateurs) appliquée le 21 octobre 2026.
 
+Migration `0006` (méthodologie Benely: table `methodology_documents` et version 1 active) appliquée le 21 octobre 2026; sur ce projet, la table a été créée par `0006_methodology_schema` et le document inséré séparément (contenu identique, vérifié par empreinte md5). La génération lit ce document avec `SUPABASE_SERVICE_ROLE_KEY`: sans cette variable, elle se fait sans document de référence et un incident est journalisé.
+
 ## 2. À faire dans le tableau de bord Supabase
 
 1. **Authentication → URL Configuration**

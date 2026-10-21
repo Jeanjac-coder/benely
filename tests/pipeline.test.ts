@@ -5,7 +5,8 @@ import { AiError } from "../lib/ai/client.ts";
 import { AGENTS } from "../lib/ai/agents.generated.ts";
 import { STEP_AGENTS, stepExperts } from "../lib/ai/expertise.ts";
 import { assemble, nextStep, runStep, type JobOutputs } from "../lib/ai/pipeline.ts";
-import type { JobInput } from "../lib/ai/prompts.ts";
+import { buildContext, instruction, SYSTEM, type JobInput } from "../lib/ai/prompts.ts";
+import { METHODOLOGY_STEP_LABELS, METHODOLOGY_STEPS } from "../lib/methodology.ts";
 import { STEPS, type Step } from "../lib/ai/schemas.ts";
 import { EMPTY_PROFILE } from "../lib/profile.ts";
 import { sample } from "./fixtures.ts";
@@ -68,4 +69,25 @@ test("experts: chaque étape mobilise des fiches existantes et non vides", () =>
   }
   // Les gabarits de code et l'outillage sont écartés du texte injecté.
   for (const a of Object.values(AGENTS)) assert.doesNotMatch(a.text, /```/);
+});
+
+test("méthodologie: le document actif est injecté dans le contexte et l'audit couvre les 10 étapes", async () => {
+  const withDoc: JobInput = { ...input, methodology: { version: 3, title: "Méthode", content: "## 1. Diagnostic et audit\\nRègle maison." } };
+  const ctx = buildContext(withDoc);
+  assert.match(ctx, /Méthodologie Benely \(référence principale, version 3/);
+  assert.match(ctx, /Règle maison/);
+  assert.doesNotMatch(buildContext(input), /Méthodologie Benely/);
+  assert.match(SYSTEM, /référence principale/);
+  const audit = instruction("diagnostic", withDoc, {});
+  for (const s of METHODOLOGY_STEPS) assert.ok(audit.includes(METHODOLOGY_STEP_LABELS[s]), s);
+  // La version utilisée est enregistrée avec la stratégie.
+  const fixture = sample();
+  let outputs: JobOutputs = {};
+  const fake = (async (_s: unknown, _sys: string, _c: string, ask: string) => {
+    const step = STEPS.find((x) => !outputs[x])!;
+    assert.ok(ask.includes("## Consigne"));
+    return { data: fixture[step], usage: { model: "fake", inputTokens: 1, outputTokens: 1 } };
+  }) as Parameters<typeof runStep>[3];
+  for (let step = nextStep(outputs); step; step = nextStep(outputs)) outputs = (await runStep(step, withDoc, outputs, fake)).outputs;
+  assert.equal(assemble(withDoc, outputs).meta.methodologyVersion, 3);
 });

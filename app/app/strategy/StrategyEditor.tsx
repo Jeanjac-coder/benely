@@ -39,7 +39,10 @@ export function StrategyEditor({ strategyId, title, version, versions }: {
   return (
     <>
       <h1>{title}</h1>
-      <p className="muted small">Version {version.version} · {SOURCES[version.source]} · {new Date(version.created_at).toLocaleString("fr-FR")}</p>
+      <p className="muted small">
+        Version {version.version} · {SOURCES[version.source]} · {new Date(version.created_at).toLocaleString("fr-FR")}
+        {" · "}{version.deliverables.meta.methodologyVersion ? <span className="badge badge-fait">Méthodologie Benely v{version.deliverables.meta.methodologyVersion}</span> : <span className="badge">Antérieure à la méthodologie</span>}
+      </p>
       <ExportMenu label="Dossier complet" />
       <div className="tabs" role="tablist" style={{ margin: "16px 0 4px" }}>
         {STEPS.map((s) => (

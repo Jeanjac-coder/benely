@@ -25,7 +25,7 @@ export function expertiseBlock(step: Step): string {
   return `## Méthode des experts mobilisés pour cette étape
 Applique les exigences, cadres et critères de qualité des fiches ci-dessous (en anglais) pour élever le niveau du livrable.
 Adapte-les au contexte de l'entreprise et du pays: ignore les plateformes, outils ou pratiques absents du marché local, et privilégie les canaux réellement utilisés (WhatsApp, TikTok, Facebook, radio, mobile money…).
-Elles ne remplacent ni les principes de Benely (faits, estimations, hypothèses), ni le format de sortie demandé.
+Elles ne remplacent ni la méthodologie Benely, qui reste la référence principale, ni les principes de Benely (faits, estimations, hypothèses), ni le format de sortie demandé.
 
 ${profiles}`;
 }

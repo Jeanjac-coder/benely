@@ -10,6 +10,7 @@ const ITEMS: NavItem[] = [
   { href: "/admin/plans", label: "Offres", icon: "tag" },
   { href: "/admin/payments", label: "Paiements", icon: "card" },
   { href: "/admin/ai", label: "Consommation IA", icon: "cpu" },
+  { href: "/admin/methodology", label: "Méthodologie", icon: "strategy" },
   { href: "/admin/prompts", label: "Prompts", icon: "text" },
   { href: "/admin/events", label: "Incidents", icon: "alert" },
   { href: "/admin/audit", label: "Audit", icon: "log" },
